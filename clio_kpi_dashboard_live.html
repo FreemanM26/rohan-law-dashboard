@@ -597,9 +597,8 @@ const FIELDS = [
 ].join('%2C');
 
 async function apiGet(path) {
-  const res = await fetch(`${CONFIG.base_url}${path}`, {
-    headers: { 'Authorization': `Bearer ${CONFIG.access_token}`, 'Content-Type': 'application/json' }
-  });
+  const workerUrl = `https://clio-proxy.mitchell-173.workers.dev/?path=${encodeURIComponent(path)}`;
+  const res = await fetch(workerUrl);
   if (res.status === 401) {
     const refreshed = await refreshToken();
     if (!refreshed) throw new Error('AUTH_FAILED');
