@@ -599,9 +599,15 @@ const FIELDS = [
 async function apiGet(path) {
   const workerUrl = `https://clio-proxy.mitchell-173.workers.dev/?path=${encodeURIComponent(path)}`;
   const res = await fetch(workerUrl);
-if (!res.ok) {
-  const errText = await res.text();
-  throw new Error(`Worker error ${res.status}: ${errText}`);
+  const text = await res.text();
+  if (!res.ok) {
+    throw new Error(`Worker error ${res.status}: ${text}`);
+  }
+  try {
+    return JSON.parse(text);
+  } catch(e) {
+    throw new Error(`JSON parse error: ${text.substring(0, 200)}`);
+  }
 }
   if (res.status === 401) {
     const refreshed = await refreshToken();
@@ -645,7 +651,7 @@ async function fetchAllMatters() {
 
   // Get total count first
   const first = await apiGet(`/api/v4/matters.json?limit=200&fields=${FIELDS}`);
-if (!first || !first.data) throw new Error('Unexpected response: ' + JSON.stringify(first));
+if (!first || !first.data) throw new Error('Bad response shape: ' + JSON.stringify(first).substring(0, 200));
 const total = first?.meta?.paging?.total_count || first.data.length;
 const totalPages = Math.ceil(total / 200);
 
