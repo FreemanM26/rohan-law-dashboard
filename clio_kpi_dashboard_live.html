@@ -599,6 +599,10 @@ const FIELDS = [
 async function apiGet(path) {
   const workerUrl = `https://clio-proxy.mitchell-173.workers.dev/?path=${encodeURIComponent(path)}`;
   const res = await fetch(workerUrl);
+if (!res.ok) {
+  const errText = await res.text();
+  throw new Error(`Worker error ${res.status}: ${errText}`);
+}
   if (res.status === 401) {
     const refreshed = await refreshToken();
     if (!refreshed) throw new Error('AUTH_FAILED');
