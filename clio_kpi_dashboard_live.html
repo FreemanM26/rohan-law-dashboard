@@ -609,20 +609,6 @@ async function apiGet(path) {
     throw new Error(`JSON parse error: ${text.substring(0, 200)}`);
   }
 }
-  if (res.status === 401) {
-    const refreshed = await refreshToken();
-    if (!refreshed) throw new Error('AUTH_FAILED');
-    const res2 = await fetch(`${CONFIG.base_url}${path}`, {
-      headers: { 'Authorization': `Bearer ${CONFIG.access_token}`, 'Content-Type': 'application/json' }
-    });
-    if (!res2.ok) throw new Error(`API error ${res2.status}`);
-    return res2.json();
-  }
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`API error ${res.status}: ${errText}`);
-}
-}
 
 async function refreshToken() {
   try {
