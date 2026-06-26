@@ -662,9 +662,15 @@ page = 1;
   setLoadProgress(page, totalPages, allMatters.length, total);
 
   while (pageToken) {
-    await sleep(600);
-    const json = await apiGet(`/api/v4/matters.json?limit=200&fields=${FIELDS}&page_token=${pageToken}`);
-    pageToken = json.meta?.paging?.next || null;
+    await sleep(100);
+    while (pageToken) {
+  await sleep(100);
+  const json = await apiGet(`/api/v4/matters.json?limit=200&fields=${FIELDS}&page_token=${pageToken}`);
+  allMatters.push(...(json.data || []));
+  pageToken = json?.meta?.paging?.next || null;
+  page++;
+  setLoadProgress(page, totalPages, allMatters.length, total);
+}
     page++;
     setLoadProgress(page, totalPages, allMatters.length, total);
 }
