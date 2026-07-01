@@ -734,9 +734,13 @@ function processMatters(matters) {
     }
 
     // Attorneys
-    const atty = m.responsible_attorney?.name || '(unassigned)';
-    attyMap.all[atty] = (attyMap.all[atty] || 0) + 1;
-    if (attyMap[status]) attyMap[status][atty] = (attyMap[status][atty] || 0) + 1;
+const atty = m.responsible_attorney?.name || '(unassigned)';
+const attyKey2 = `${status}|${area}`;
+attyMap.all[atty] = (attyMap.all[atty] || 0) + 1;
+if (!attyMap[status]) attyMap[status] = {};
+attyMap[status][atty] = (attyMap[status][atty] || 0) + 1;
+if (!attyMap[attyKey2]) attyMap[attyKey2] = {};
+attyMap[attyKey2][atty] = (attyMap[attyKey2][atty] || 0) + 1;
 
     // City
     const city = m.client?.name ? null : null; // city comes from custom fields
@@ -819,17 +823,25 @@ function processMatters(matters) {
   });
 
   // Attorney arrays
-  const sortAtty = obj => Object.entries(obj)
-    .map(([a, c]) => ({ a, c }))
-    .sort((x, y) => y.c - x.c)
-    .slice(0, 12);
-  ATTORNEY_DATA = {
-    all:     sortAtty(attyMap.all),
-    Open:    sortAtty(attyMap.Open),
-    Closed:  sortAtty(attyMap.Closed),
-    Pending: sortAtty(attyMap.Pending),
-  };
-
+ const sortAtty = obj => Object.entries(obj)
+  .map(([a, c]) => ({ a, c }))
+  .sort((x, y) => y.c - x.c)
+  .slice(0, 12);
+ATTORNEY_DATA = { all: sortAtty(attyMap.all) };
+STATUSES.forEach(s => {
+  ATTORNEY_DATA[s] = sortAtty(attyMap[s] || {});
+  AREAS.forEach(a => {
+    ATTORNEY_DATA[`${s}|${a}`] = sortAtty(attyMap[`${s}|${a}`] || {});
+  });
+});
+AREAS.forEach(a => {
+  ATTORNEY_DATA[`all|${a}`] = sortAtty(
+    STATUSES.reduce((acc, s) => {
+      Object.entries(attyMap[`${s}|${a}`] || {}).forEach(([k,v]) => acc[k] = (acc[k]||0)+v);
+      return acc;
+    }, {})
+  );
+});
   // Cities — merge with geo data
   CITIES = Object.entries(cityMap)
     .map(([city, count]) => {
@@ -1231,8 +1243,10 @@ function update() {
     return'#5A5248';
   }, 155);
 
-  const attyKey = statusF==='all'?'all':statusF;
-  renderBars('attorneyBars', ATTORNEY_DATA[attyKey]||ATTORNEY_DATA['all'], (_,i)=>ATTY_COLORS[i%ATTY_COLORS.length], 145);
+  const attyLookup = areaF === 'all'
+  ? (statusF === 'all' ? 'all' : statusF)
+  : (statusF === 'all' ? `all|${areaF}` : `${statusF}|${areaF}`);
+renderBars('attorneyBars', ATTORNEY_DATA[attyLookup] || ATTORNEY_DATA['all'], (_,i) => ATTY_COLORS[i % ATTY_COLORS.length], 145);
 
   renderBars('settlementBars', SETTLEMENTS,
     d=>d.area==='Criminal'?'#A52020':d.area==='Personal Injury'?'#4A9C6A':d.area==="Workers' Comp"?'#C9A84C':'#5A5248',
