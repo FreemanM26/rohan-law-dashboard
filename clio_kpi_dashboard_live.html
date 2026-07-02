@@ -1090,14 +1090,6 @@ function stackedDs(src, statusF) {
   }));
 }
 
-function switchTab(which) {
-  document.querySelectorAll('.comp-tab').forEach((t,i) => {
-    t.classList.toggle('active', (i===0&&which==='status')||(i===1&&which==='area'));
-  });
-  document.getElementById('panel-status').classList.toggle('active', which==='status');
-  document.getElementById('panel-area').classList.toggle('active', which==='area');
-}
-
 const ttCfg = {backgroundColor:'#221E1A',titleColor:'#C9A84C',bodyColor:'#9E9080',borderColor:'rgba(201,168,76,0.2)',borderWidth:1,cornerRadius:6};
 const gridColor='rgba(255,255,255,0.05)', tickColor='#5A5248';
 const baseOpts = {responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...ttCfg}}};
