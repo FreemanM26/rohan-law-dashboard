@@ -882,11 +882,11 @@ matters.forEach(m => {
     }
   }
 });
+const ACTIVE_ATTORNEYS = ['Doug Rohan', 'Esti Afanador', 'Kevin Schumaker', 'Morgan Carroll', 'David Schaefer'];
 ATTY_DAYS_DATA = Object.entries(attyDurMap)
-  .filter(([, v]) => v.count >= 3)
+  .filter(([a, v]) => ACTIVE_ATTORNEYS.includes(a) && v.count >= 3)
   .map(([a, v]) => ({ area: a, days: Math.round(v.sum / v.count) }))
-  .sort((a, b) => b.days - a.days)
-  .slice(0, 12);
+  .sort((a, b) => b.days - a.days);
 
   // Year data array
   YEAR_DATA = Object.entries(yearMap)
