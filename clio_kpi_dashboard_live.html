@@ -1168,7 +1168,6 @@ function update() {
   document.getElementById('m-closed-sub').textContent=total>0?Math.round(byStatus.Closed/total*100)+'% of total':'';
   document.getElementById('m-pending').textContent  = byStatus.Pending.toLocaleString();
   document.getElementById('m-pending-sub').textContent=total>0?Math.round(byStatus.Pending/total*100)+'% of total':'';
-  document.getElementById('m-ar').textContent       = fmtMoney(settlement);
   document.getElementById('m-dur').textContent      = avgDur?avgDur.toLocaleString():'—';
 
   // Donuts
