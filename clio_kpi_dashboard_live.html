@@ -396,13 +396,10 @@ select:focus { border-color: var(--gold); }
       <div style="position:relative;height:260px;"><canvas id="daysChart"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Settlement amounts by practice area</div>
-      <div class="card-sub">Matters with settlement data recorded in Clio</div>
-      <div id="settlementBars" style="margin-bottom:16px;"></div>
-      <div class="card-title" style="margin-top:12px;">Attorney fees collected</div>
-      <div class="card-sub">From matters with fee data in Clio</div>
-      <div id="feesBars"></div>
-    </div>
+    <div class="card-title">Avg days to close by attorney</div>
+    <div class="card-sub">Closed matters only · attorneys with 3+ closed matters</div>
+    <div id="attyDaysBars"></div>
+   </div>
   </div>
 
   <p class="section-eyebrow">People & referrals</p>
@@ -555,7 +552,7 @@ let DATA_AS_OF = FB_FALLBACK_AS_OF = 'Jun 22, 2026';
 // Derived datasets (populated by processMatters() or useFallback())
 let MATRIX={}, YEAR_DATA=[], MONTH_DATA=[], VELOCITY_DATA=[], DAYS_DATA=[];
 let ATTORNEY_DATA={all:[],Open:[],Closed:[],Pending:[]};
-let CITIES=[], LANGUAGES=[], SETTLEMENTS=[], FEES=[];
+let CITIES=[], LANGUAGES=[], SETTLEMENTS=[], FEES=[], ATTY_DAYS_DATA=[];
 let AREA_DETAIL={};
 
 const STATUSES     = ['Open','Closed','Pending'];
@@ -872,10 +869,30 @@ AREAS.forEach(a => {
     .sort((a, b) => b.days - a.days)
     .slice(0, 14);
 
+    // Avg days to close by attorney
+const attyDurMap = {};
+matters.forEach(m => {
+  if (m.status === 'Closed' && m.open_date && m.close_date) {
+    const atty = m.responsible_attorney?.name || '(unassigned)';
+    const d = daysBetween(m.open_date, m.close_date);
+    if (d !== null && d >= 0 && d < 10000) {
+      if (!attyDurMap[atty]) attyDurMap[atty] = { sum: 0, count: 0 };
+      attyDurMap[atty].sum   += d;
+      attyDurMap[atty].count += 1;
+    }
+  }
+});
+ATTY_DAYS_DATA = Object.entries(attyDurMap)
+  .filter(([, v]) => v.count >= 3)
+  .map(([a, v]) => ({ area: a, days: Math.round(v.sum / v.count) }))
+  .sort((a, b) => b.days - a.days)
+  .slice(0, 12);
+
   // Year data array
   YEAR_DATA = Object.entries(yearMap)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([year, v]) => ({ year, ...v }));
+  .sort(([a], [b]) => a.localeCompare(b))
+  .filter(([year]) => parseInt(year) >= 2012)
+  .map(([year, v]) => ({ year, ...v }));
 
   // Month data array (ordered)
   const MONTH_ORDER = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1215,17 +1232,14 @@ function update() {
   : (statusF === 'all' ? `all|${areaF}` : `${statusF}|${areaF}`);
 renderBars('attorneyBars', ATTORNEY_DATA[attyLookup] || ATTORNEY_DATA['all'], (_,i) => ATTY_COLORS[i % ATTY_COLORS.length], 145);
 
-  renderBars('settlementBars', SETTLEMENTS,
-    d=>d.area==='Criminal'?'#A52020':d.area==='Personal Injury'?'#4A9C6A':d.area==="Workers' Comp"?'#C9A84C':'#5A5248',
-    145, fmtMoney);
-
-  renderBars('feesBars', FEES,
-    d=>d.area==='Criminal'?'#A52020':d.area==='Personal Injury'?'#4A9C6A':d.area==="Workers' Comp"?'#C9A84C':'#5A5248',
-    145, fmtMoney);
+  renderBars('attyDaysBars', ATTY_DAYS_DATA,
+  d => d.area === '(unassigned)' ? '#5A5248' : '#4A90C4',
+  155, v => `${v} days`);
 
   renderBars('languageBars', LANGUAGES, (_,i)=>['#C9A84C','#4A90C4','#4A9C6A','#A52020','#7B68C8'][i%5], 120);
 
   renderBars('cityBars', CITIES.slice(0,15).map(c=>({area:c.city,count:c.count})), ()=>'#8B1A1A', 120);
+
 }
 
 // ── Map ───────────────────────────────────────────────────────────────────────
