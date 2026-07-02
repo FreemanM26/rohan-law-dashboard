@@ -348,20 +348,9 @@ select:focus { border-color: var(--gold); }
   <p class="section-eyebrow">Composition</p>
   <div class="chart-row r-211">
     <div class="card">
-      <div class="comp-tabs">
-        <button class="comp-tab active" onclick="switchTab('status')">By status</button>
-        <button class="comp-tab" onclick="switchTab('area')">By practice area</button>
-      </div>
-      <div class="comp-panel active" id="panel-status">
-        <div class="card-sub">Distribution across all matters</div>
-        <div style="position:relative;height:180px;"><canvas id="statusChart"></canvas></div>
-        <div class="legend" id="statusLegend"></div>
-      </div>
-      <div class="comp-panel" id="panel-area">
-        <div class="card-sub">Grouped category breakdown</div>
-        <div style="position:relative;height:180px;"><canvas id="areaChart"></canvas></div>
-        <div class="legend" id="areaLegend"></div>
-      </div>
+     <div class="card-sub">Grouped category breakdown</div>
+     <div style="position:relative;height:180px;"><canvas id="areaChart"></canvas></div>
+     <div class="legend" id="areaLegend"></div>
     </div>
     <div class="card">
       <div class="card-title">Practice area detail</div>
@@ -1191,14 +1180,6 @@ function update() {
   document.getElementById('m-dur').textContent      = avgDur?avgDur.toLocaleString():'—';
 
   // Donuts
-  const sLabels = STATUSES.filter(s=>byStatus[s]>0);
-  if(statusChart) statusChart.destroy();
-  statusChart = new Chart(document.getElementById('statusChart'),{
-    type:'doughnut',
-    data:{labels:sLabels,datasets:[{data:sLabels.map(s=>byStatus[s]),backgroundColor:sLabels.map(s=>STATUS_COLORS[s]),borderWidth:0,hoverOffset:6}]},
-    options:{...baseOpts,cutout:'65%'}
-  });
-  makeLegend('statusLegend',sLabels.map(s=>({label:`${s} — ${byStatus[s].toLocaleString()}`,color:STATUS_COLORS[s]})));
 
   const aLabels = AREAS.filter(a=>byArea[a]>0);
   if(areaChart) areaChart.destroy();
