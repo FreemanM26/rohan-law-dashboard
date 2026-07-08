@@ -570,10 +570,9 @@ let statusChart, areaChart, yearChart, monthChart, velocityChart, daysChart;
 // ══════════════════════════════════════════════════════════════════════════════
 
 const FIELDS = [
-  'id','status','open_date','close_date','pending_date',
+  'id','status','open_date','close_date',
   'practice_area%7Bid%2Cname%7D',
   'responsible_attorney%7Bid%2Cname%7D',
-  'originating_attorney%7Bid%2Cname%7D',
   'custom_field_values%7Bid%2Cvalue%2Cfield_name%7D',
 ].join('%2C');
 
@@ -730,6 +729,11 @@ attyMap[attyKey2][atty] = (attyMap[attyKey2][atty] || 0) + 1;
       const c = cfCity.trim();
       cityMap[c] = (cityMap[c] || 0) + 1;
     }
+
+    // Only process selected custom fields
+   const WANTED_CF = new Set(['Preferred Language','Referral Source','Settlement Amount','Attorney Fees','Total Awards','Court','Judge']);
+   const cfv = m.custom_field_values || [];
+   m.custom_field_values = cfv.filter(c => WANTED_CF.has(c.field_name));
 
     // Language
     const lang = getCF(m, 'Preferred Language');
