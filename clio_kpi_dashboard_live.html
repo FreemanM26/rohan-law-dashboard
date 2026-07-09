@@ -939,9 +939,7 @@ function drawMap(mapId, matters, bubbleColor='#8B1A1A') {
   });
   // For filtered pages, use proportional distribution from FB_CITIES since we don't have per-matter city
   // For overview, use all cities
-  const citiesToDraw = matters === ALL_MATTERS
-    ? FB_CITIES
-    : buildCityCountsFromMatters(matters);
+  const citiesToDraw = FB_CITIES;
   if (!citiesToDraw.length) return;
   const maxCount=Math.max(...citiesToDraw.map(c=>c.count));
   const maxR=48,minR=7;
