@@ -1043,7 +1043,7 @@ function renderOverview() {
   const cityData=FB_CITIES.slice(0,15).map(c=>({label:c.city,count:c.count}));
   renderBars('ov-cityBars',cityData,()=>'#8B1A1A',120);
 
-  drawMap('map-overview',ALL_MATTERS,'#8B1A1A');
+  setTimeout(()=>drawMap('map-overview',ALL_MATTERS,'#8B1A1A'),300);
 }
 
 function renderCriminal() {
@@ -1076,7 +1076,7 @@ function renderCriminal() {
   const judgeData=Object.entries(judgeMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,12);
   renderBars('cr-judgeBars',judgeData,()=>'#C9A84C',155);
 
-  drawMap('map-criminal',matters,'#A52020');
+  setTimeout(()=>drawMap('map-criminal',matters,'#A52020'),300);
 }
 
 function renderPI() {
@@ -1097,7 +1097,7 @@ function renderPI() {
   buildSettlementBars('pi-settlementBars',matters,()=>'#4A9C6A',160);
   buildFeesBars('pi-feesBars',matters,()=>'#2E7D52',160);
   buildAttyBars('pi-attorneyBars',matters,145);
-  drawMap('map-pi',matters,'#4A9C6A');
+  setTimeout(()=>drawMap('map-pi',matters,'#4A9C6A'),300);
 }
 
 function renderWC() {
@@ -1118,7 +1118,7 @@ function renderWC() {
   buildSettlementBars('wc-settlementBars',matters,d=>d.label?.startsWith('Personal Injury')?'#4A9C6A':'#C9A84C',155);
   buildFeesBars('wc-feesBars',matters,()=>'#8B6914',155);
   buildAttyBars('wc-attorneyBars',matters,145);
-  drawMap('map-wc',matters,'#C9A84C');
+  setTimeout(()=>drawMap('map-wc',matters,'#C9A84C'),300);
 }
 
 function renderOther() {
@@ -1136,7 +1136,7 @@ function renderOther() {
 
   buildAttyBars('ot-attorneyBars',matters,145);
   buildSubareaDaysBars('ot-daysBars',matters,'','#5A5248',155);
-  drawMap('map-other',matters,'#5A5248');
+  setTimeout(()=>drawMap('map-other',matters,'#5A5248'),300);
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
