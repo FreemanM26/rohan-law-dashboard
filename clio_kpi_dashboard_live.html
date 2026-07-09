@@ -916,16 +916,34 @@ function totalSettlement(matters) {
 // ══════════════════════════════════════════════════════════════════════════════
 //  MAP
 // ══════════════════════════════════════════════════════════════════════════════
-function initMap(mapId) {
+function initMap(mapId, bubbleColor, matters) {
   if (MAPS[mapId]) return;
   const container = document.getElementById(mapId);
   if (!container) return;
-  const m = L.map(mapId,{center:[33.92,-84.25],zoom:10,zoomControl:true,attributionControl:true,preferCanvas:true});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter_all/{z}/{x}/{y}{r}.png',{
-    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
-    subdomains:'abcd',maxZoom:16,
-  }).addTo(m);
-  MAPS[mapId] = {map:m, layers:[]};
+  const doInit = () => {
+    if (MAPS[mapId]) return;
+    const m = L.map(mapId, {center:[33.92,-84.25],zoom:10,zoomControl:true,attributionControl:true,preferCanvas:true});
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter_all/{z}/{x}/{y}{r}.png',{
+      attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+      subdomains:'abcd',maxZoom:16,
+    }).addTo(m);
+    MAPS[mapId] = {map:m, layers:[]};
+    setTimeout(()=>{m.invalidateSize();drawMap(mapId,matters||ALL_MATTERS,bubbleColor||'#8B1A1A');},200);
+  };
+  if (container.offsetHeight > 0) {
+    doInit();
+  } else {
+    const obs = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        if (entry.contentRect.height > 0) {
+          obs.disconnect();
+          doInit();
+          break;
+        }
+      }
+    });
+    obs.observe(container);
+  }
 }
 
 function drawMap(mapId, matters, bubbleColor='#8B1A1A') {
@@ -1043,7 +1061,7 @@ function renderOverview() {
   const cityData=FB_CITIES.slice(0,15).map(c=>({label:c.city,count:c.count}));
   renderBars('ov-cityBars',cityData,()=>'#8B1A1A',120);
 
-  setTimeout(()=>drawMap('map-overview',ALL_MATTERS,'#8B1A1A'),800);
+  initMap('map-overview','#8B1A1A',ALL_MATTERS);
 }
 
 function renderCriminal() {
@@ -1076,7 +1094,7 @@ function renderCriminal() {
   const judgeData=Object.entries(judgeMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,12);
   renderBars('cr-judgeBars',judgeData,()=>'#C9A84C',155);
 
-  setTimeout(()=>drawMap('map-criminal',matters,'#A52020'),800);
+  initMap('map-criminal','#A52020',matters);
 }
 
 function renderPI() {
@@ -1097,7 +1115,7 @@ function renderPI() {
   buildSettlementBars('pi-settlementBars',matters,()=>'#4A9C6A',160);
   buildFeesBars('pi-feesBars',matters,()=>'#2E7D52',160);
   buildAttyBars('pi-attorneyBars',matters,145);
-  setTimeout(()=>drawMap('map-pi',matters,'#4A9C6A'),800);
+  initMap('map-pi','#4A9C6A',matters);
 }
 
 function renderWC() {
@@ -1118,7 +1136,7 @@ function renderWC() {
   buildSettlementBars('wc-settlementBars',matters,d=>d.label?.startsWith('Personal Injury')?'#4A9C6A':'#C9A84C',155);
   buildFeesBars('wc-feesBars',matters,()=>'#8B6914',155);
   buildAttyBars('wc-attorneyBars',matters,145);
-  setTimeout(()=>drawMap('map-wc',matters,'#C9A84C'),800);
+  initMap('map-wc','#C9A84C',matters);
 }
 
 function renderOther() {
@@ -1136,7 +1154,7 @@ function renderOther() {
 
   buildAttyBars('ot-attorneyBars',matters,145);
   buildSubareaDaysBars('ot-daysBars',matters,'','#5A5248',155);
-  setTimeout(()=>drawMap('map-other',matters,'#5A5248'),800);
+  initMap('map-other','#5A5248',matters);
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
