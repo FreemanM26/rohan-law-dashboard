@@ -918,6 +918,8 @@ function totalSettlement(matters) {
 // ══════════════════════════════════════════════════════════════════════════════
 function initMap(mapId) {
   if (MAPS[mapId]) return;
+  const container = document.getElementById(mapId);
+  if (!container) return;
   const m = L.map(mapId,{center:[33.92,-84.25],zoom:10,zoomControl:true,attributionControl:true});
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter_all/{z}/{x}/{y}{r}.png',{
     attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
@@ -1158,7 +1160,11 @@ function switchPage(page) {
   if (sub) sub.textContent = PAGE_SUBTITLES[page] || '';
   renderPage(page);
   // Invalidate maps after page switch
-  setTimeout(()=>{Object.values(MAPS).forEach(m=>m.map?.invalidateSize());},200);
+  setTimeout(()=>{
+  const mapId = `map-${page}`;
+  if(MAPS[mapId]) MAPS[mapId].map.invalidateSize();
+  else { initMap(mapId); drawMap(mapId, ALL_MATTERS); }
+ },300);
 }
 
 function renderPage(page) {
