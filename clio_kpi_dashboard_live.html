@@ -11,380 +11,245 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --crimson:     #8B1A1A;
-  --crimson-mid: #A52020;
-  --gold:        #C9A84C;
-  --gold-lite:   #E2C06A;
-  --bg:          #111010;
-  --surface:     #1A1714;
-  --surface2:    #221E1A;
-  --surface3:    #2A2520;
-  --border:      rgba(201,168,76,0.12);
-  --border-2:    rgba(255,255,255,0.06);
-  --text:        #F0EBE0;
-  --text-2:      #9E9080;
-  --text-3:      #5A5248;
-  --blue:        #4A90C4;
-  --blue-dim:    rgba(74,144,196,0.15);
-  --green:       #4A9C6A;
-  --green-dim:   rgba(74,156,106,0.15);
-  --amber:       #C9A84C;
-  --amber-dim:   rgba(201,168,76,0.15);
-  --red-alert:   #C0392B;
-  --red-dim:     rgba(192,57,43,0.15);
-  --radius:      8px;
-  --font:        'Inter', system-ui, sans-serif;
-  --mono:        'JetBrains Mono', monospace;
+  --crimson:#8B1A1A; --crimson-mid:#A52020; --gold:#C9A84C; --gold-lite:#E2C06A;
+  --bg:#111010; --surface:#1A1714; --surface2:#221E1A; --surface3:#2A2520;
+  --border:rgba(201,168,76,0.12); --border-2:rgba(255,255,255,0.06);
+  --text:#F0EBE0; --text-2:#9E9080; --text-3:#5A5248;
+  --blue:#4A90C4; --blue-dim:rgba(74,144,196,0.15);
+  --green:#4A9C6A; --green-dim:rgba(74,156,106,0.15);
+  --amber:#C9A84C; --amber-dim:rgba(201,168,76,0.15);
+  --red-alert:#C0392B; --red-dim:rgba(192,57,43,0.15);
+  --radius:8px; --font:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;}
 
-/* ── Loading Screen ── */
-#loadingScreen {
-  position: fixed; inset: 0; background: var(--bg);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  z-index: 9999; transition: opacity 0.6s ease;
-}
-#loadingScreen.fade-out { opacity: 0; pointer-events: none; }
-.loading-logo {
-  width: 64px; height: 64px;
-  background: linear-gradient(135deg, var(--crimson), var(--crimson-mid));
-  border-radius: 12px; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 22px; color: var(--gold);
-  border: 1px solid rgba(201,168,76,0.4);
-  margin-bottom: 24px;
-  box-shadow: 0 0 40px rgba(139,26,26,0.4);
-}
-.loading-firm { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-.loading-sub  { font-size: 13px; color: var(--text-2); margin-bottom: 40px; }
-.loading-bar-wrap {
-  width: 320px; height: 3px; background: var(--surface2);
-  border-radius: 99px; overflow: hidden; margin-bottom: 16px;
-}
-.loading-bar-fill {
-  height: 100%; width: 0%; border-radius: 99px;
-  background: linear-gradient(to right, var(--crimson), var(--gold));
-  transition: width 0.3s ease;
-}
-.loading-status { font-size: 12px; color: var(--text-2); font-family: var(--mono); }
-.loading-count  { font-size: 11px; color: var(--text-3); margin-top: 6px; }
-.loading-mode-badge {
-  margin-top: 28px; font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 5px 12px; border-radius: 99px;
-  border: 1px solid var(--border);
-}
-.loading-mode-badge.live    { background: var(--green-dim);  color: var(--green); border-color: rgba(74,156,106,0.3); }
-.loading-mode-badge.offline { background: var(--amber-dim);  color: var(--amber); border-color: rgba(201,168,76,0.3); }
+/* Loading */
+#loadingScreen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.6s ease;}
+#loadingScreen.fade-out{opacity:0;pointer-events:none;}
+.loading-logo{width:64px;height:64px;background:linear-gradient(135deg,var(--crimson),var(--crimson-mid));border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:var(--gold);border:1px solid rgba(201,168,76,0.4);margin-bottom:24px;box-shadow:0 0 40px rgba(139,26,26,0.4);}
+.loading-firm{font-size:20px;font-weight:600;margin-bottom:4px;}
+.loading-sub{font-size:13px;color:var(--text-2);margin-bottom:40px;}
+.loading-bar-wrap{width:320px;height:3px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-bottom:16px;}
+.loading-bar-fill{height:100%;width:0%;border-radius:99px;background:linear-gradient(to right,var(--crimson),var(--gold));transition:width 0.3s ease;}
+.loading-status{font-size:12px;color:var(--text-2);font-family:var(--mono);}
+.loading-count{font-size:11px;color:var(--text-3);margin-top:6px;}
+.loading-mode-badge{margin-top:28px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;border-radius:99px;border:1px solid var(--border);}
+.loading-mode-badge.live{background:var(--green-dim);color:var(--green);border-color:rgba(74,156,106,0.3);}
+.loading-mode-badge.offline{background:var(--amber-dim);color:var(--amber);border-color:rgba(201,168,76,0.3);}
 
-/* ── Data mode banner ── */
-#dataBanner {
-  display: none; align-items: center; gap: 8px;
-  padding: 7px 32px; font-size: 11px; font-weight: 500;
-  border-bottom: 1px solid var(--border);
-}
-#dataBanner.show { display: flex; }
-#dataBanner.live    { background: var(--green-dim);  color: var(--green); }
-#dataBanner.offline { background: var(--amber-dim);  color: var(--amber); }
-.banner-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+/* Banner */
+#dataBanner{display:none;align-items:center;gap:8px;padding:7px 32px;font-size:11px;font-weight:500;border-bottom:1px solid var(--border);}
+#dataBanner.show{display:flex;}
+#dataBanner.live{background:var(--green-dim);color:var(--green);}
+#dataBanner.offline{background:var(--amber-dim);color:var(--amber);}
+.banner-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
 
-/* ── Header ── */
-.header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 32px; height: 64px;
-  background: var(--surface); border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 200;
-}
-.header-left { display: flex; align-items: center; gap: 16px; }
-.logo-img { height: 42px; width: auto; object-fit: contain; filter: brightness(1.1); }
-.logo-fallback { display: flex; align-items: center; gap: 10px; }
-.logo-mark {
-  width: 40px; height: 40px;
-  background: linear-gradient(135deg, var(--crimson), var(--crimson-mid));
-  border-radius: 6px; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px; color: var(--gold);
-  letter-spacing: 0.5px; flex-shrink: 0; border: 1px solid var(--gold);
-}
-.firm-name { font-size: 15px; font-weight: 600; color: var(--text); }
-.firm-sub  { font-size: 11px; color: var(--text-2); letter-spacing: 0.02em; }
-.gold-divider {
-  width: 1px; height: 32px;
-  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
-  opacity: 0.4; margin: 0 8px;
-}
-.header-filters { display: flex; gap: 10px; align-items: center; }
-.filter-label { font-size: 12px; color: var(--text-2); }
-select {
-  font-size: 12px; font-family: var(--font);
-  padding: 7px 30px 7px 12px; border-radius: 6px;
-  border: 1px solid var(--border); background: var(--surface2); color: var(--text);
-  cursor: pointer; outline: none; appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239E9080' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 10px center; background-size: 10px;
-}
-select:focus { border-color: var(--gold); }
-.as-of { font-size: 11px; color: var(--text-3); border-left: 1px solid var(--border-2); padding-left: 12px; margin-left: 4px; }
-.refresh-btn {
-  display: flex; align-items: center; gap: 6px;
-  padding: 6px 12px; border-radius: 5px; border: 1px solid var(--border);
-  background: var(--surface2); color: var(--text-2); font-size: 11px;
-  font-family: var(--font); cursor: pointer; transition: all 0.15s; font-weight: 500;
-}
-.refresh-btn:hover { border-color: var(--gold); color: var(--gold); }
-.refresh-btn svg { transition: transform 0.3s; }
-.refresh-btn.spinning svg { animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+.header-left{display:flex;align-items:center;gap:16px;}
+.logo-img{height:42px;width:auto;object-fit:contain;filter:brightness(1.1);}
+.logo-fallback{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:40px;height:40px;background:linear-gradient(135deg,var(--crimson),var(--crimson-mid));border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--gold);letter-spacing:0.5px;flex-shrink:0;border:1px solid var(--gold);}
+.firm-name{font-size:15px;font-weight:600;color:var(--text);}
+.firm-sub{font-size:11px;color:var(--text-2);letter-spacing:0.02em;}
+.gold-divider{width:1px;height:32px;background:linear-gradient(to bottom,transparent,var(--gold),transparent);opacity:0.4;margin:0 8px;}
+.header-right{display:flex;gap:10px;align-items:center;}
+.as-of{font-size:11px;color:var(--text-3);border-left:1px solid var(--border-2);padding-left:12px;margin-left:4px;}
+.refresh-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--text-2);font-size:11px;font-family:var(--font);cursor:pointer;transition:all 0.15s;font-weight:500;}
+.refresh-btn:hover{border-color:var(--gold);color:var(--gold);}
+.refresh-btn svg{transition:transform 0.3s;}
+.refresh-btn.spinning svg{animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
-/* ── Layout ── */
-.dash { padding: 24px 32px; max-width: 1900px; margin: 0 auto; }
-.section-eyebrow {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--gold);
-  margin-bottom: 12px; margin-top: 28px;
-  display: flex; align-items: center; gap: 10px;
-}
-.section-eyebrow::after { content:''; flex:1; height:1px; background: linear-gradient(to right, var(--border), transparent); }
-.section-eyebrow:first-child { margin-top: 0; }
+/* Page nav */
+.page-nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;gap:2px;position:sticky;top:64px;z-index:190;}
+.page-tab{padding:14px 20px;font-size:12px;font-weight:600;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font);letter-spacing:0.02em;white-space:nowrap;}
+.page-tab:hover{color:var(--text);}
+.page-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.page-tab .tab-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:middle;}
 
-/* ── Metric cards ── */
-.metric-row { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; margin-bottom: 24px; }
-.metric-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px 18px;
-  position: relative; overflow: hidden; transition: border-color 0.2s;
-}
-.metric-card:hover { border-color: rgba(201,168,76,0.3); }
-.metric-card::before {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
-  background: var(--bar-color, var(--gold)); opacity: 0.5;
-}
-.metric-card.blue  { --bar-color: var(--blue); }
-.metric-card.green { --bar-color: var(--green); }
-.metric-card.amber { --bar-color: var(--amber); }
-.metric-card.alert { --bar-color: var(--red-alert); }
-.metric-card.hidden { display: none; }
-.metric-row.filtered { grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); }
-.metric-label { font-size: 11px; color: var(--text-2); font-weight: 500; letter-spacing: 0.03em; margin-bottom: 8px; text-transform: uppercase; }
-.metric-value { font-size: 26px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; font-family: var(--mono); line-height: 1; }
-.metric-sub { font-size: 11px; color: var(--text-3); margin-top: 5px; }
+/* Sub-area toggle (Criminal page) */
+.subarea-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;}
+.subarea-btn{padding:6px 14px;border-radius:99px;border:1px solid var(--border);background:var(--surface2);color:var(--text-2);font-size:11px;font-weight:500;cursor:pointer;transition:all 0.15s;font-family:var(--font);}
+.subarea-btn:hover{border-color:var(--gold);color:var(--text);}
+.subarea-btn.active{background:var(--crimson);color:var(--gold-lite);border-color:rgba(201,168,76,0.4);}
 
-/* ── Chart grid ── */
-.chart-row { display: grid; gap: 10px; margin-bottom: 10px; }
-.r-2   { grid-template-columns: 1fr 1fr; }
-.r-3   { grid-template-columns: 1fr 1fr 1fr; }
-.r-211 { grid-template-columns: 2fr 1fr 1fr; }
+/* Layout */
+.page{display:none;padding:24px 32px;max-width:1900px;margin:0 auto;}
+.page.active{display:block;}
+.section-eyebrow{font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;margin-top:28px;display:flex;align-items:center;gap:10px;}
+.section-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.section-eyebrow:first-child{margin-top:0;}
 
-.card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 18px 20px;
-}
-.card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-.card-sub   { font-size: 11px; color: var(--text-3); margin-bottom: 14px; }
+/* Metric cards */
+.metric-row{display:grid;gap:10px;margin-bottom:24px;}
+.metric-row-5{grid-template-columns:repeat(5,1fr);}
+.metric-row-4{grid-template-columns:repeat(4,1fr);}
+.metric-row-6{grid-template-columns:repeat(6,1fr);}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.metric-card:hover{border-color:rgba(201,168,76,0.3);}
+.metric-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--bar-color,var(--gold));opacity:0.5;}
+.metric-card.blue{--bar-color:var(--blue);}
+.metric-card.green{--bar-color:var(--green);}
+.metric-card.amber{--bar-color:var(--amber);}
+.metric-card.alert{--bar-color:var(--red-alert);}
+.metric-card.purple{--bar-color:#7B68C8;}
+.metric-label{font-size:11px;color:var(--text-2);font-weight:500;letter-spacing:0.03em;margin-bottom:8px;text-transform:uppercase;}
+.metric-value{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-0.5px;font-family:var(--mono);line-height:1;}
+.metric-sub{font-size:11px;color:var(--text-3);margin-top:5px;}
 
-/* ── Legend ── */
-.legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-2); }
-.legend-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+/* Chart grid */
+.chart-row{display:grid;gap:10px;margin-bottom:10px;}
+.r-2{grid-template-columns:1fr 1fr;}
+.r-3{grid-template-columns:1fr 1fr 1fr;}
+.r-211{grid-template-columns:2fr 1fr 1fr;}
+.r-13{grid-template-columns:1fr 3fr;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.card-sub{font-size:11px;color:var(--text-3);margin-bottom:14px;}
 
-/* ── Bar rows ── */
-.bar-row   { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-.bar-label { font-size: 11px; color: var(--text-2); width: 160px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bar-track { flex: 1; height: 11px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-.bar-fill  { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-.bar-val   { font-size: 11px; color: var(--text-3); width: 44px; text-align: right; flex-shrink: 0; font-family: var(--mono); }
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-2);}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-/* ── A/R aging ── */
-.aging-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-.aging-bucket {
-  background: var(--surface2); border-radius: 6px; padding: 12px 14px;
-  border-left: 3px solid var(--bucket-color, var(--border));
-}
-.aging-label  { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 4px; }
-.aging-amount { font-size: 18px; font-weight: 700; font-family: var(--mono); color: var(--text); }
-.aging-count  { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+/* Bar rows */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.bar-label{font-size:11px;color:var(--text-2);width:160px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bar-track{flex:1;height:11px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.5s ease;}
+.bar-val{font-size:11px;color:var(--text-3);width:56px;text-align:right;flex-shrink:0;font-family:var(--mono);}
 
-/* ── Composition tabs ── */
-.comp-tabs { display: flex; gap: 4px; margin-bottom: 14px; }
-.comp-tab {
-  font-size: 11px; font-weight: 500; padding: 5px 12px;
-  border-radius: 99px; border: 1px solid var(--border);
-  background: transparent; color: var(--text-2);
-  cursor: pointer; transition: all 0.15s;
-}
-.comp-tab.active { background: var(--surface3); color: var(--gold); border-color: var(--gold); }
-.comp-panel { display: none; }
-.comp-panel.active { display: block; }
+/* Map */
+.map-wrap{position:relative;width:100%;height:380px;border-radius:6px;overflow:hidden;}
+.leaflet-container{background:#0f140f;font-family:var(--font);}
+.leaflet-control-zoom a{background:var(--surface2)!important;color:var(--text)!important;border-color:var(--border)!important;}
+.leaflet-popup-content-wrapper{background:var(--surface2)!important;color:var(--text)!important;border:1px solid rgba(201,168,76,0.3)!important;border-radius:8px!important;box-shadow:0 4px 20px rgba(0,0,0,0.6)!important;padding:0!important;}
+.leaflet-popup-content{margin:10px 14px!important;font-family:var(--font)!important;font-size:13px!important;color:var(--text)!important;}
+.leaflet-popup-tip{background:var(--surface2)!important;}
+.leaflet-popup-close-button{color:var(--text-2)!important;top:6px!important;right:8px!important;}
+.leaflet-control-attribution{background:rgba(26,23,20,0.85)!important;color:var(--text-3)!important;font-size:9px!important;}
+.leaflet-control-attribution a{color:var(--text-3)!important;}
+.popup-city{font-weight:600;color:var(--gold);font-size:13px;}
+.popup-count{color:var(--text-2);font-size:12px;margin-top:2px;}
+.bubble-label{background:transparent!important;border:none!important;box-shadow:none!important;color:rgba(240,235,224,0.9)!important;font-family:var(--font)!important;font-size:11px!important;font-weight:600!important;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 6px rgba(0,0,0,0.9)!important;pointer-events:none!important;white-space:nowrap!important;}
+.bubble-label::before{display:none!important;}
 
-/* ── Map ── */
-.map-wrap { position: relative; width: 100%; height: 380px; border-radius: 6px; overflow: hidden; }
-#leaflet-map { width: 100%; height: 100%; }
-.leaflet-container { background: #0f140f; font-family: var(--font); }
-.leaflet-control-zoom a { background: var(--surface2) !important; color: var(--text) !important; border-color: var(--border) !important; }
-.leaflet-control-zoom a:hover { background: var(--surface3) !important; }
-.leaflet-control-attribution { background: rgba(26,23,20,0.85) !important; color: var(--text-3) !important; font-size: 9px !important; }
-.leaflet-control-attribution a { color: var(--text-3) !important; }
-.leaflet-popup-content-wrapper {
-  background: var(--surface2) !important; color: var(--text) !important;
-  border: 1px solid rgba(201,168,76,0.3) !important; border-radius: 8px !important;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important; padding: 0 !important;
-}
-.leaflet-popup-content { margin: 10px 14px !important; font-family: var(--font) !important; font-size: 13px !important; color: var(--text) !important; }
-.leaflet-popup-tip { background: var(--surface2) !important; }
-.leaflet-popup-close-button { color: var(--text-2) !important; top: 6px !important; right: 8px !important; }
-.popup-city  { font-weight: 600; color: var(--gold); font-size: 13px; }
-.popup-count { color: var(--text-2); font-size: 12px; margin-top: 2px; }
-.bubble-label {
-  background: transparent !important; border: none !important; box-shadow: none !important;
-  color: rgba(240,235,224,0.9) !important; font-family: var(--font) !important;
-  font-size: 11px !important; font-weight: 600 !important;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.9) !important;
-  pointer-events: none !important; white-space: nowrap !important;
-}
-.bubble-label::before { display: none !important; }
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     LOADING SCREEN
-═══════════════════════════════════════════════════════════════════════════ -->
+<!-- LOADING -->
 <div id="loadingScreen">
   <div class="loading-logo">RL</div>
   <div class="loading-firm">Rohan Law</div>
   <div class="loading-sub">KPI Dashboard — loading live data</div>
-  <div class="loading-bar-wrap">
-    <div class="loading-bar-fill" id="loadBar"></div>
-  </div>
+  <div class="loading-bar-wrap"><div class="loading-bar-fill" id="loadBar"></div></div>
   <div class="loading-status" id="loadStatus">Connecting to Clio…</div>
-  <div class="loading-count"  id="loadCount"></div>
+  <div class="loading-count" id="loadCount"></div>
   <div class="loading-mode-badge live" id="loadBadge">Live data</div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     DATA MODE BANNER
-═══════════════════════════════════════════════════════════════════════════ -->
-<div id="dataBanner">
-  <div class="banner-dot"></div>
-  <span id="bannerMsg"></span>
-</div>
+<!-- BANNER -->
+<div id="dataBanner"><div class="banner-dot"></div><span id="bannerMsg"></span></div>
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     HEADER
-═══════════════════════════════════════════════════════════════════════════ -->
+<!-- HEADER -->
 <header class="header">
   <div class="header-left">
     <img class="logo-img" src="https://rohanlawpc.com/wp-content/uploads/2021/05/logo-footer.png" alt="Rohan Law"
-      onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
+      onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex';">
     <div class="logo-fallback" id="logo-fallback" style="display:none;">
       <div class="logo-mark">RL</div>
       <div><div class="firm-name">Rohan Law</div><div class="firm-sub">Atlanta, Georgia</div></div>
     </div>
     <div class="gold-divider"></div>
-    <div><div class="firm-name">KPI Dashboard</div><div class="firm-sub">Matter management overview</div></div>
+    <div><div class="firm-name">KPI Dashboard</div><div class="firm-sub" id="pageSubtitle">Firm overview</div></div>
   </div>
-  <div class="header-filters">
-    <span class="filter-label">Status</span>
-    <select id="statusFilter" onchange="update()">
-      <option value="all">All statuses</option>
-      <option value="Open">Open</option>
-      <option value="Closed">Closed</option>
-      <option value="Pending">Pending</option>
-    </select>
-    <span class="filter-label">Practice area</span>
-    <select id="areaFilter" onchange="update()">
-      <option value="all">All areas</option>
-      <option value="Criminal">Criminal</option>
-      <option value="Personal Injury">Personal Injury</option>
-      <option value="Workers' Comp">Workers' Comp</option>
-      <option value="Other">Other</option>
-    </select>
+  <div class="header-right">
     <span class="as-of" id="asOf">Loading…</span>
     <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M23 4v6h-6M1 20v-6h6"/>
-        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-      </svg>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
       Refresh
     </button>
   </div>
 </header>
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     DASHBOARD BODY
-═══════════════════════════════════════════════════════════════════════════ -->
-<div class="dash">
+<!-- PAGE NAV -->
+<nav class="page-nav">
+  <button class="page-tab active" onclick="switchPage('overview')" id="tab-overview">
+    <span class="tab-dot" style="background:#C9A84C"></span>Overview
+  </button>
+  <button class="page-tab" onclick="switchPage('criminal')" id="tab-criminal">
+    <span class="tab-dot" style="background:#A52020"></span>Criminal
+  </button>
+  <button class="page-tab" onclick="switchPage('pi')" id="tab-pi">
+    <span class="tab-dot" style="background:#4A9C6A"></span>Personal Injury
+  </button>
+  <button class="page-tab" onclick="switchPage('wc')" id="tab-wc">
+    <span class="tab-dot" style="background:#C9A84C"></span>Workers' Comp
+  </button>
+  <button class="page-tab" onclick="switchPage('other')" id="tab-other">
+    <span class="tab-dot" style="background:#5A5248"></span>Other
+  </button>
+</nav>
 
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: OVERVIEW
+═══════════════════════════════════════════════════════════ -->
+<div class="page active" id="page-overview">
   <p class="section-eyebrow">Overview</p>
-  <div class="metric-row" id="metric-row">
-    <div class="metric-card" id="card-total">
-      <div class="metric-label">Total matters</div>
-      <div class="metric-value" id="m-total">—</div>
-      <div class="metric-sub" id="m-total-sub">all time</div>
-    </div>
-    <div class="metric-card blue" id="card-open">
-      <div class="metric-label">Open</div>
-      <div class="metric-value" id="m-open">—</div>
-      <div class="metric-sub" id="m-open-sub"></div>
-    </div>
-    <div class="metric-card green" id="card-closed">
-      <div class="metric-label">Closed</div>
-      <div class="metric-value" id="m-closed">—</div>
-      <div class="metric-sub" id="m-closed-sub"></div>
-    </div>
-    <div class="metric-card amber" id="card-pending">
-      <div class="metric-label">Pending</div>
-      <div class="metric-value" id="m-pending">—</div>
-      <div class="metric-sub" id="m-pending-sub"></div>
-    </div>
-    <div class="metric-card" id="card-dur">
-      <div class="metric-label">Avg days to close</div>
-      <div class="metric-value" id="m-dur">—</div>
-      <div class="metric-sub">closed matters</div>
-    </div>
+  <div class="metric-row metric-row-5">
+    <div class="metric-card"><div class="metric-label">Total matters</div><div class="metric-value" id="ov-total">—</div><div class="metric-sub">all time</div></div>
+    <div class="metric-card blue"><div class="metric-label">Open</div><div class="metric-value" id="ov-open">—</div><div class="metric-sub" id="ov-open-sub"></div></div>
+    <div class="metric-card green"><div class="metric-label">Closed</div><div class="metric-value" id="ov-closed">—</div><div class="metric-sub" id="ov-closed-sub"></div></div>
+    <div class="metric-card amber"><div class="metric-label">Pending</div><div class="metric-value" id="ov-pending">—</div><div class="metric-sub" id="ov-pending-sub"></div></div>
+    <div class="metric-card"><div class="metric-label">Avg days to close</div><div class="metric-value" id="ov-dur">—</div><div class="metric-sub">all closed matters</div></div>
   </div>
 
   <p class="section-eyebrow">Composition</p>
   <div class="chart-row r-211">
     <div class="card">
-     <div class="card-sub">Grouped category breakdown</div>
-     <div style="position:relative;height:180px;"><canvas id="areaChart"></canvas></div>
-     <div class="legend" id="areaLegend"></div>
+      <div class="card-sub">Practice area breakdown</div>
+      <div style="position:relative;height:180px;"><canvas id="ov-areaChart"></canvas></div>
+      <div class="legend" id="ov-areaLegend"></div>
     </div>
     <div class="card">
       <div class="card-title">Practice area detail</div>
       <div class="card-sub">Sub-area matter count</div>
-      <div id="practiceAreaBars"></div>
+      <div id="ov-practiceAreaBars"></div>
     </div>
     <div class="card">
       <div class="card-title">Responsible attorney</div>
       <div class="card-sub">Matter count by attorney</div>
-      <div id="attorneyBars"></div>
+      <div id="ov-attorneyBars"></div>
     </div>
   </div>
 
   <p class="section-eyebrow">Volume trends</p>
-  <div class="chart-row" style="grid-template-columns:1fr; margin-bottom:10px;">
+  <div class="chart-row" style="grid-template-columns:1fr;margin-bottom:10px;">
     <div class="card">
       <div class="card-title">Matter velocity — opened vs. closed</div>
-      <div class="card-sub">Monthly · last 24 months · shows whether the firm is keeping pace with incoming matters</div>
-      <div style="position:relative;height:210px;"><canvas id="velocityChart"></canvas></div>
-      <div class="legend" id="velocityLegend"></div>
+      <div class="card-sub">Monthly · last 24 months · all practice areas</div>
+      <div style="position:relative;height:210px;"><canvas id="ov-velocityChart"></canvas></div>
+      <div class="legend" id="ov-velocityLegend"></div>
     </div>
   </div>
   <div class="chart-row r-2">
     <div class="card">
       <div class="card-title">Matters opened by year</div>
-      <div class="card-sub" id="yearChartSub">2016 – present · stacked by current status</div>
-      <div style="position:relative;height:200px;"><canvas id="yearChart"></canvas></div>
-      <div class="legend" id="yearLegend"></div>
+      <div class="card-sub">2012 – present · stacked by current status</div>
+      <div style="position:relative;height:200px;"><canvas id="ov-yearChart"></canvas></div>
+      <div class="legend" id="ov-yearLegend"></div>
     </div>
     <div class="card">
       <div class="card-title">Matters opened by month — current year</div>
-      <div class="card-sub" id="monthChartSub">Jan – present · current month is partial</div>
-      <div style="position:relative;height:200px;"><canvas id="monthChart"></canvas></div>
-      <div class="legend" id="monthLegend"></div>
+      <div class="card-sub">Jan – present · current month is partial</div>
+      <div style="position:relative;height:200px;"><canvas id="ov-monthChart"></canvas></div>
+      <div class="legend" id="ov-monthLegend"></div>
     </div>
   </div>
 
@@ -393,13 +258,13 @@ select:focus { border-color: var(--gold); }
     <div class="card">
       <div class="card-title">Avg days to close by practice area</div>
       <div class="card-sub">Closed matters only · sub-areas with 3+ matters</div>
-      <div style="position:relative;height:260px;"><canvas id="daysChart"></canvas></div>
+      <div style="position:relative;height:260px;"><canvas id="ov-daysChart"></canvas></div>
     </div>
     <div class="card">
-    <div class="card-title">Avg days to close by attorney</div>
-    <div class="card-sub">Closed matters only · attorneys with 3+ closed matters</div>
-    <div id="attyDaysBars"></div>
-   </div>
+      <div class="card-title">Avg days to close by attorney</div>
+      <div class="card-sub">Active attorneys · closed matters only</div>
+      <div id="ov-attyDaysBars"></div>
+    </div>
   </div>
 
   <p class="section-eyebrow">People & referrals</p>
@@ -407,120 +272,352 @@ select:focus { border-color: var(--gold); }
     <div class="card">
       <div class="card-title">Preferred language</div>
       <div class="card-sub">From matters with language data in Clio</div>
-      <div id="languageBars"></div>
+      <div id="ov-languageBars"></div>
     </div>
     <div class="card">
       <div class="card-title">Top cities by client count</div>
       <div class="card-sub">Ranked · all matters with city data</div>
-      <div id="cityBars"></div>
+      <div id="ov-cityBars"></div>
     </div>
   </div>
 
   <p class="section-eyebrow">Client geography</p>
   <div class="chart-row" style="grid-template-columns:1fr;">
     <div class="card">
-      <div class="card-title">Metro Atlanta client map</div>
+      <div class="card-title">Metro Atlanta client map — all matters</div>
       <div class="card-sub">Bubble size = client count · click any bubble for details</div>
-      <div class="map-wrap"><div id="leaflet-map"></div></div>
+      <div class="map-wrap"><div id="map-overview"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: CRIMINAL
+═══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-criminal">
+  <p class="section-eyebrow">Filter by sub-area</p>
+  <div class="subarea-nav" id="cr-subarea-nav">
+    <button class="subarea-btn active" onclick="setCriminalSubarea('all', this)">All Criminal</button>
+    <button class="subarea-btn" onclick="setCriminalSubarea('Criminal', this)">General</button>
+    <button class="subarea-btn" onclick="setCriminalSubarea('Criminal - DUI', this)">DUI</button>
+    <button class="subarea-btn" onclick="setCriminalSubarea('Criminal - Traffic', this)">Traffic</button>
+    <button class="subarea-btn" onclick="setCriminalSubarea('Criminal - Misdemeanor', this)">Misdemeanor</button>
+    <button class="subarea-btn" onclick="setCriminalSubarea('Criminal - Felony/Person', this)">Felony / Person</button>
+    <button class="subarea-btn" onclick="setCriminalSubarea('Criminal - Felony/Sex', this)">Felony / Sex</button>
+    <button class="subarea-btn" onclick="setCriminalSubarea('Criminal - Felony/Property', this)">Felony / Property</button>
+    <button class="subarea-btn" onclick="setCriminalSubarea('Criminal - Felony/Drugs', this)">Felony / Drugs</button>
+  </div>
+
+  <p class="section-eyebrow">Overview</p>
+  <div class="metric-row metric-row-5">
+    <div class="metric-card alert"><div class="metric-label">Total criminal</div><div class="metric-value" id="cr-total">—</div><div class="metric-sub" id="cr-subareaLabel">all sub-areas</div></div>
+    <div class="metric-card blue"><div class="metric-label">Open</div><div class="metric-value" id="cr-open">—</div><div class="metric-sub" id="cr-open-sub"></div></div>
+    <div class="metric-card green"><div class="metric-label">Closed</div><div class="metric-value" id="cr-closed">—</div><div class="metric-sub" id="cr-closed-sub"></div></div>
+    <div class="metric-card amber"><div class="metric-label">Pending</div><div class="metric-value" id="cr-pending">—</div><div class="metric-sub" id="cr-pending-sub"></div></div>
+    <div class="metric-card"><div class="metric-label">Avg days to close</div><div class="metric-value" id="cr-dur">—</div><div class="metric-sub">closed matters</div></div>
+  </div>
+
+  <p class="section-eyebrow">Volume trends</p>
+  <div class="chart-row" style="grid-template-columns:1fr;margin-bottom:10px;">
+    <div class="card">
+      <div class="card-title">Matter velocity — opened vs. closed</div>
+      <div class="card-sub" id="cr-velocity-sub">Monthly · last 24 months · criminal matters</div>
+      <div style="position:relative;height:210px;"><canvas id="cr-velocityChart"></canvas></div>
+      <div class="legend" id="cr-velocityLegend"></div>
+    </div>
+  </div>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Matters opened by year</div>
+      <div class="card-sub">2012 – present · criminal matters</div>
+      <div style="position:relative;height:200px;"><canvas id="cr-yearChart"></canvas></div>
+      <div class="legend" id="cr-yearLegend"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Matters opened by month — current year</div>
+      <div class="card-sub">Jan – present · current month is partial</div>
+      <div style="position:relative;height:200px;"><canvas id="cr-monthChart"></canvas></div>
+      <div class="legend" id="cr-monthLegend"></div>
     </div>
   </div>
 
-</div><!-- /dash -->
+  <p class="section-eyebrow">Breakdown & performance</p>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Responsible attorney</div>
+      <div class="card-sub">Criminal matter count by attorney</div>
+      <div id="cr-attorneyBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Avg days to close by sub-area</div>
+      <div class="card-sub">Closed criminal matters only</div>
+      <div id="cr-daysBars"></div>
+    </div>
+  </div>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Court</div>
+      <div class="card-sub">Matters by court name</div>
+      <div id="cr-courtBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Judge</div>
+      <div class="card-sub">Matters by judge</div>
+      <div id="cr-judgeBars"></div>
+    </div>
+  </div>
+
+  <p class="section-eyebrow">Client geography</p>
+  <div class="chart-row" style="grid-template-columns:1fr;">
+    <div class="card">
+      <div class="card-title">Metro Atlanta client map — criminal matters</div>
+      <div class="card-sub">Bubble size = client count · click any bubble for details</div>
+      <div class="map-wrap"><div id="map-criminal"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: PERSONAL INJURY
+═══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-pi">
+  <p class="section-eyebrow">Overview</p>
+  <div class="metric-row metric-row-6">
+    <div class="metric-card green"><div class="metric-label">Total PI matters</div><div class="metric-value" id="pi-total">—</div><div class="metric-sub">all time</div></div>
+    <div class="metric-card blue"><div class="metric-label">Open</div><div class="metric-value" id="pi-open">—</div><div class="metric-sub" id="pi-open-sub"></div></div>
+    <div class="metric-card green"><div class="metric-label">Closed</div><div class="metric-value" id="pi-closed">—</div><div class="metric-sub" id="pi-closed-sub"></div></div>
+    <div class="metric-card amber"><div class="metric-label">Pending</div><div class="metric-value" id="pi-pending">—</div><div class="metric-sub" id="pi-pending-sub"></div></div>
+    <div class="metric-card"><div class="metric-label">Avg days to close</div><div class="metric-value" id="pi-dur">—</div><div class="metric-sub">closed matters</div></div>
+    <div class="metric-card purple"><div class="metric-label">Total settlements</div><div class="metric-value" id="pi-settlement">—</div><div class="metric-sub" id="pi-settlement-sub">settled matters</div></div>
+  </div>
+
+  <p class="section-eyebrow">Volume trends</p>
+  <div class="chart-row" style="grid-template-columns:1fr;margin-bottom:10px;">
+    <div class="card">
+      <div class="card-title">Matter velocity — opened vs. closed</div>
+      <div class="card-sub">Monthly · last 24 months · personal injury matters</div>
+      <div style="position:relative;height:210px;"><canvas id="pi-velocityChart"></canvas></div>
+      <div class="legend" id="pi-velocityLegend"></div>
+    </div>
+  </div>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Matters opened by year</div>
+      <div class="card-sub">2012 – present · PI matters</div>
+      <div style="position:relative;height:200px;"><canvas id="pi-yearChart"></canvas></div>
+      <div class="legend" id="pi-yearLegend"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Matters opened by month — current year</div>
+      <div class="card-sub">Jan – present · current month is partial</div>
+      <div style="position:relative;height:200px;"><canvas id="pi-monthChart"></canvas></div>
+      <div class="legend" id="pi-monthLegend"></div>
+    </div>
+  </div>
+
+  <p class="section-eyebrow">Performance & financials</p>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Avg days to close by referring attorney</div>
+      <div class="card-sub">Closed PI matters only · 3+ matters</div>
+      <div id="pi-daysBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Settlement amounts by referring attorney</div>
+      <div class="card-sub">PI matters with settlement data in Clio</div>
+      <div id="pi-settlementBars"></div>
+    </div>
+  </div>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Attorney fees by referring attorney</div>
+      <div class="card-sub">PI matters with fee data in Clio</div>
+      <div id="pi-feesBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Responsible attorney</div>
+      <div class="card-sub">PI matter count by attorney</div>
+      <div id="pi-attorneyBars"></div>
+    </div>
+  </div>
+
+  <p class="section-eyebrow">Client geography</p>
+  <div class="chart-row" style="grid-template-columns:1fr;">
+    <div class="card">
+      <div class="card-title">Metro Atlanta client map — PI matters</div>
+      <div class="card-sub">Bubble size = client count · click any bubble for details</div>
+      <div class="map-wrap"><div id="map-pi"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: WORKERS' COMP
+═══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-wc">
+  <p class="section-eyebrow">Overview</p>
+  <div class="metric-row metric-row-6">
+    <div class="metric-card amber"><div class="metric-label">Total WC matters</div><div class="metric-value" id="wc-total">—</div><div class="metric-sub">all time</div></div>
+    <div class="metric-card blue"><div class="metric-label">Open</div><div class="metric-value" id="wc-open">—</div><div class="metric-sub" id="wc-open-sub"></div></div>
+    <div class="metric-card green"><div class="metric-label">Closed</div><div class="metric-value" id="wc-closed">—</div><div class="metric-sub" id="wc-closed-sub"></div></div>
+    <div class="metric-card amber"><div class="metric-label">Pending</div><div class="metric-value" id="wc-pending">—</div><div class="metric-sub" id="wc-pending-sub"></div></div>
+    <div class="metric-card"><div class="metric-label">Avg days to close</div><div class="metric-value" id="wc-dur">—</div><div class="metric-sub">closed matters</div></div>
+    <div class="metric-card purple"><div class="metric-label">Total settlements</div><div class="metric-value" id="wc-settlement">—</div><div class="metric-sub" id="wc-settlement-sub">settled matters</div></div>
+  </div>
+
+  <p class="section-eyebrow">Volume trends</p>
+  <div class="chart-row" style="grid-template-columns:1fr;margin-bottom:10px;">
+    <div class="card">
+      <div class="card-title">Matter velocity — opened vs. closed</div>
+      <div class="card-sub">Monthly · last 24 months · workers' comp matters</div>
+      <div style="position:relative;height:210px;"><canvas id="wc-velocityChart"></canvas></div>
+      <div class="legend" id="wc-velocityLegend"></div>
+    </div>
+  </div>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Matters opened by year</div>
+      <div class="card-sub">2012 – present · WC matters</div>
+      <div style="position:relative;height:200px;"><canvas id="wc-yearChart"></canvas></div>
+      <div class="legend" id="wc-yearLegend"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Matters opened by month — current year</div>
+      <div class="card-sub">Jan – present · current month is partial</div>
+      <div style="position:relative;height:200px;"><canvas id="wc-monthChart"></canvas></div>
+      <div class="legend" id="wc-monthLegend"></div>
+    </div>
+  </div>
+
+  <p class="section-eyebrow">Performance & financials</p>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Avg days to close by attorney</div>
+      <div class="card-sub">Closed WC matters only · active attorneys</div>
+      <div id="wc-daysBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Settlement amounts by sub-area</div>
+      <div class="card-sub">WC matters with settlement data in Clio</div>
+      <div id="wc-settlementBars"></div>
+    </div>
+  </div>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Attorney fees by sub-area</div>
+      <div class="card-sub">WC matters with fee data in Clio</div>
+      <div id="wc-feesBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Responsible attorney</div>
+      <div class="card-sub">WC matter count by attorney</div>
+      <div id="wc-attorneyBars"></div>
+    </div>
+  </div>
+
+  <p class="section-eyebrow">Client geography</p>
+  <div class="chart-row" style="grid-template-columns:1fr;">
+    <div class="card">
+      <div class="card-title">Metro Atlanta client map — WC matters</div>
+      <div class="card-sub">Bubble size = client count · click any bubble for details</div>
+      <div class="map-wrap"><div id="map-wc"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: OTHER
+═══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-other">
+  <p class="section-eyebrow">Overview</p>
+  <div class="metric-row metric-row-5">
+    <div class="metric-card"><div class="metric-label">Total other matters</div><div class="metric-value" id="ot-total">—</div><div class="metric-sub">all time</div></div>
+    <div class="metric-card blue"><div class="metric-label">Open</div><div class="metric-value" id="ot-open">—</div><div class="metric-sub" id="ot-open-sub"></div></div>
+    <div class="metric-card green"><div class="metric-label">Closed</div><div class="metric-value" id="ot-closed">—</div><div class="metric-sub" id="ot-closed-sub"></div></div>
+    <div class="metric-card amber"><div class="metric-label">Pending</div><div class="metric-value" id="ot-pending">—</div><div class="metric-sub" id="ot-pending-sub"></div></div>
+    <div class="metric-card"><div class="metric-label">Avg days to close</div><div class="metric-value" id="ot-dur">—</div><div class="metric-sub">closed matters</div></div>
+  </div>
+
+  <p class="section-eyebrow">Volume trends</p>
+  <div class="chart-row" style="grid-template-columns:1fr;margin-bottom:10px;">
+    <div class="card">
+      <div class="card-title">Matter velocity — opened vs. closed</div>
+      <div class="card-sub">Monthly · last 24 months · other matters</div>
+      <div style="position:relative;height:210px;"><canvas id="ot-velocityChart"></canvas></div>
+      <div class="legend" id="ot-velocityLegend"></div>
+    </div>
+  </div>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Matters opened by year</div>
+      <div class="card-sub">2012 – present · other matters</div>
+      <div style="position:relative;height:200px;"><canvas id="ot-yearChart"></canvas></div>
+      <div class="legend" id="ot-yearLegend"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Sub-area breakdown</div>
+      <div class="card-sub">Matter count by sub-area</div>
+      <div id="ot-subareaBar"></div>
+    </div>
+  </div>
+
+  <p class="section-eyebrow">Breakdown</p>
+  <div class="chart-row r-2">
+    <div class="card">
+      <div class="card-title">Responsible attorney</div>
+      <div class="card-sub">Other matter count by attorney</div>
+      <div id="ot-attorneyBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Avg days to close by sub-area</div>
+      <div class="card-sub">Closed other matters only</div>
+      <div id="ot-daysBars"></div>
+    </div>
+  </div>
+
+  <p class="section-eyebrow">Client geography</p>
+  <div class="chart-row" style="grid-template-columns:1fr;">
+    <div class="card">
+      <div class="card-title">Metro Atlanta client map — other matters</div>
+      <div class="card-sub">Bubble size = client count · click any bubble for details</div>
+      <div class="map-wrap"><div id="map-other"></div></div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ══════════════════════════════════════════════════════════════════════════════
-// ██████████████████████████████████████████████████████████████████████████████
-//
-//   ████████╗ ██████╗ ██╗  ██╗███████╗███╗   ██╗    ██████╗ ███████╗
-//      ██╔══╝██╔═══██╗██║ ██╔╝██╔════╝████╗  ██║   ██╔════╝ ██╔════╝
-//      ██║   ██║   ██║█████╔╝ █████╗  ██╔██╗ ██║   ██║      █████╗
-//      ██║   ██║   ██║██╔═██╗ ██╔══╝  ██║╚██╗██║   ██║      ██╔══╝
-//      ██║   ╚██████╔╝██║  ██╗███████╗██║ ╚████║██╗╚██████╔╝███████╗
-//      ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═╝ ╚═════╝ ╚══════╝
-//
-//  PASTE YOUR CLIO CREDENTIALS BELOW — THIS IS THE ONLY PLACE YOU NEED TO EDIT
-//
-// ██████████████████████████████████████████████████████████████████████████████
+// ██  CONFIG — PASTE YOUR CREDENTIALS HERE  ███████████████████████████████████
 // ══════════════════════════════════════════════════════════════════════════════
-
 const CONFIG = {
-  access_token:   '33902-iIlMgWgUYawh91sobwyGYyz9Ck5rX7dMwl',   // ← paste your access_token here
-  refresh_token:  'oZD9deI8avYA4PmxigblTIeOyOln2TayNwxvUEgY',  // ← paste your refresh_token here
+  access_token:   '33902-A6DjVUwxgvO65A17r4h0b1jnOMIeBarKT',
+  refresh_token:  'WTR98WBLahnTqJgdrkR9ueFsBGOb7FAaCh9Wg70u',
   client_id:      'yuBr9ZA2HVtUKNB7QBX4hFX69fxt8CWvyQBuRR2B',
-  client_secret:  '9w5ylIedznBnktTmYMb6q5qvoX9ByDNikhfPBMRi',  // ← paste your client_secret here
+  client_secret:  '9w5ylIedznBnktTmYMb6q5qvoX9ByDNikhfPBMRi',
   base_url:       'https://app.clio.com',
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  FALLBACK DATA  —  Update periodically from latest Clio export
-//  Last updated: June 22, 2026
+//  FALLBACK DATA — update periodically · Last updated: Jun 22, 2026
 // ══════════════════════════════════════════════════════════════════════════════
-const FALLBACK = {
-  matters: null, // populated from hardcoded constants below
-  asOf: 'Jun 22, 2026',
-};
-
-// ── Hardcoded fallback constants (same as original dashboard) ─────────────────
+const FALLBACK_AS_OF = 'Jun 22, 2026';
 const FB_MATRIX = {
-  'Open|Criminal':          {count:461,  avgDur:205},
-  'Open|Personal Injury':   {count:95,   avgDur:788},
-  "Open|Workers' Comp":     {count:87,   avgDur:null},
-  'Open|Other':             {count:77,   avgDur:404},
-  'Closed|Criminal':        {count:1554, avgDur:272},
-  'Closed|Personal Injury': {count:315,  avgDur:538},
-  "Closed|Workers' Comp":   {count:384,  avgDur:336},
-  'Closed|Other':           {count:73,   avgDur:291},
-  'Pending|Criminal':       {count:22,   avgDur:215},
-  'Pending|Personal Injury':{count:52,   avgDur:null},
-  "Pending|Workers' Comp":  {count:72,   avgDur:429},
-  'Pending|Other':          {count:0,    avgDur:null},
+  'Open|Criminal':{count:461,avgDur:205},'Open|Personal Injury':{count:95,avgDur:788},
+  "Open|Workers' Comp":{count:87,avgDur:null},'Open|Other':{count:77,avgDur:404},
+  'Closed|Criminal':{count:1554,avgDur:272},'Closed|Personal Injury':{count:315,avgDur:538},
+  "Closed|Workers' Comp":{count:384,avgDur:336},'Closed|Other':{count:73,avgDur:291},
+  'Pending|Criminal':{count:22,avgDur:215},'Pending|Personal Injury':{count:52,avgDur:null},
+  "Pending|Workers' Comp":{count:72,avgDur:429},'Pending|Other':{count:0,avgDur:null},
 };
-const FB_YEAR_DATA = [
-  {year:'2016',Closed:45,Open:0,Pending:1},{year:'2017',Closed:188,Open:1,Pending:15},
-  {year:'2018',Closed:263,Open:4,Pending:10},{year:'2019',Closed:319,Open:7,Pending:27},
-  {year:'2020',Closed:241,Open:13,Pending:57},{year:'2021',Closed:227,Open:20,Pending:7},
-  {year:'2022',Closed:264,Open:34,Pending:5},{year:'2023',Closed:264,Open:62,Pending:6},
-  {year:'2024',Closed:243,Open:111,Pending:7},{year:'2025',Closed:240,Open:252,Pending:10},
-  {year:'2026',Closed:32,Open:216,Pending:1},
+const FB_VELOCITY=[
+  {m:'Jul 24',o:42,c:18},{m:'Aug 24',o:32,c:15},{m:'Sep 24',o:37,c:111},{m:'Oct 24',o:21,c:5},
+  {m:'Nov 24',o:35,c:19},{m:'Dec 24',o:35,c:42},{m:'Jan 25',o:31,c:24},{m:'Feb 25',o:46,c:23},
+  {m:'Mar 25',o:37,c:10},{m:'Apr 25',o:35,c:37},{m:'May 25',o:52,c:15},{m:'Jun 25',o:41,c:24},
+  {m:'Jul 25',o:37,c:16},{m:'Aug 25',o:49,c:26},{m:'Sep 25',o:43,c:16},{m:'Oct 25',o:64,c:17},
+  {m:'Nov 25',o:32,c:7},{m:'Dec 25',o:35,c:24},{m:'Jan 26',o:54,c:74},{m:'Feb 26',o:34,c:20},
+  {m:'Mar 26',o:46,c:53},{m:'Apr 26',o:42,c:30},{m:'May 26',o:40,c:31},{m:'Jun 26',o:33,c:18},
 ];
-const FB_MONTH_DATA = [
-  {month:'Jan',Closed:12,Open:41,Pending:1},{month:'Feb',Closed:7,Open:27,Pending:0},
-  {month:'Mar',Closed:8,Open:38,Pending:0},{month:'Apr',Closed:1,Open:41,Pending:0},
-  {month:'May',Closed:3,Open:37,Pending:0},{month:'Jun',Closed:1,Open:32,Pending:0},
-];
-const FB_VELOCITY_DATA = [
-  {m:'Jul 24',o:42,c:18},{m:'Aug 24',o:32,c:15},{m:'Sep 24',o:37,c:111},
-  {m:'Oct 24',o:21,c:5},{m:'Nov 24',o:35,c:19},{m:'Dec 24',o:35,c:42},
-  {m:'Jan 25',o:31,c:24},{m:'Feb 25',o:46,c:23},{m:'Mar 25',o:37,c:10},
-  {m:'Apr 25',o:35,c:37},{m:'May 25',o:52,c:15},{m:'Jun 25',o:41,c:24},
-  {m:'Jul 25',o:37,c:16},{m:'Aug 25',o:49,c:26},{m:'Sep 25',o:43,c:16},
-  {m:'Oct 25',o:64,c:17},{m:'Nov 25',o:32,c:7},{m:'Dec 25',o:35,c:24},
-  {m:'Jan 26',o:54,c:74},{m:'Feb 26',o:34,c:20},{m:'Mar 26',o:46,c:53},
-  {m:'Apr 26',o:42,c:30},{m:'May 26',o:40,c:31},{m:'Jun 26',o:33,c:18},
-];
-const FB_DAYS_DATA = [
-  {area:"Personal Injury (Travis)",days:1058,cat:'PI'},
-  {area:"Personal Injury (Wardlow)",days:800,cat:'PI'},
-  {area:"Workers' Comp (Johnston)",days:742,cat:'WC'},
-  {area:"Personal Injury (Gunnels)",days:632,cat:'PI'},
-  {area:"Workers' Comp",days:437,cat:'WC'},
-  {area:"Personal Injury (Rohan)",days:370,cat:'PI'},
-  {area:"Workers' Comp (Pritchett)",days:316,cat:'WC'},
-  {area:'Criminal',days:287,cat:'CR'},
-  {area:"Workers' Comp (Rohan)",days:280,cat:'WC'},
-  {area:'Criminal - Felony/Person',days:211,cat:'CR'},
-  {area:'Criminal - Felony/Sex',days:203,cat:'CR'},
-  {area:'Criminal - DUI',days:174,cat:'CR'},
-  {area:'Criminal - Misdemeanor',days:172,cat:'CR'},
-  {area:'Criminal - Traffic',days:126,cat:'CR'},
-];
-const FB_ATTORNEY_DATA = {
-  'all':    [{a:'Doug Rohan',c:1042},{a:'Esti Afanador',c:514},{a:'Kevin Schumaker',c:326},{a:'Morgan Carroll',c:237},{a:'Stacey Burke',c:86},{a:'Michael Arndt',c:50},{a:'Daniella Montealegre',c:46},{a:'Beth Lee',c:31},{a:'Sara Wardlow',c:30},{a:'David Schaefer',c:23},{a:'(unassigned)',c:702}],
-  'Open':   [{a:'Doug Rohan',c:242},{a:'Esti Afanador',c:198},{a:'Kevin Schumaker',c:147},{a:'Morgan Carroll',c:80},{a:'David Schaefer',c:23},{a:'(unassigned)',c:26}],
-  'Closed': [{a:'Doug Rohan',c:754},{a:'Esti Afanador',c:315},{a:'Kevin Schumaker',c:179},{a:'Morgan Carroll',c:138},{a:'Stacey Burke',c:85},{a:'Michael Arndt',c:50},{a:'Daniella Montealegre',c:44},{a:'Beth Lee',c:31},{a:'Sara Wardlow',c:30},{a:'(unassigned)',c:698}],
-  'Pending':[{a:'Doug Rohan',c:46},{a:'Morgan Carroll',c:19},{a:'Daniella Montealegre',c:2},{a:'Esti Afanador',c:1},{a:'(unassigned)',c:78}],
-};
-const FB_CITIES = [
+const FB_CITIES=[
   {city:'Atlanta',lat:33.749,lng:-84.388,count:215},{city:'Marietta',lat:33.9526,lng:-84.5499,count:192},
   {city:'Lawrenceville',lat:33.9565,lng:-83.9879,count:162},{city:'Norcross',lat:33.9412,lng:-84.2135,count:139},
   {city:'Roswell',lat:34.0232,lng:-84.3616,count:62},{city:'Cumming',lat:34.2073,lng:-84.1402,count:44},
@@ -537,38 +634,34 @@ const FB_CITIES = [
   {city:'Loganville',lat:33.8382,lng:-83.9007,count:17},{city:'Forest Park',lat:33.6218,lng:-84.3688,count:17},
   {city:'Dalton',lat:34.7698,lng:-84.9702,count:17},
 ];
-
-// ── City geo lookup for live data map ────────────────────────────────────────
-const CITY_GEO = {};
-FB_CITIES.forEach(c => { CITY_GEO[c.city.toLowerCase()] = {lat:c.lat, lng:c.lng}; });
+const CITY_GEO={};
+FB_CITIES.forEach(c=>{CITY_GEO[c.city.toLowerCase()]={lat:c.lat,lng:c.lng};});
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  COMPUTED DATA — built from live API or fallback
+//  STATE
 // ══════════════════════════════════════════════════════════════════════════════
-let LIVE_DATA = null; // set after API fetch
-let DATA_MODE = 'offline'; // 'live' or 'offline'
-let DATA_AS_OF = FB_FALLBACK_AS_OF = 'Jun 22, 2026';
+let ALL_MATTERS = [];
+let DATA_MODE = 'offline';
+let DATA_AS_OF = FALLBACK_AS_OF;
+let CURRENT_PAGE = 'overview';
+let CURRENT_CR_SUBAREA = 'all';
 
-// Derived datasets (populated by processMatters() or useFallback())
-let MATRIX={}, YEAR_DATA=[], MONTH_DATA=[], VELOCITY_DATA=[], DAYS_DATA=[];
-let ATTORNEY_DATA={all:[],Open:[],Closed:[],Pending:[]};
-let CITIES=[], LANGUAGES=[], SETTLEMENTS=[], FEES=[], ATTY_DAYS_DATA=[];
-let AREA_DETAIL={};
+const STATUSES = ['Open','Closed','Pending'];
+const AREAS = ['Criminal','Personal Injury',"Workers' Comp",'Other'];
+const STATUS_COLORS = {Open:'#4A90C4',Closed:'#4A9C6A',Pending:'#C9A84C'};
+const AREA_COLORS = {Criminal:'#A52020','Personal Injury':'#4A9C6A',"Workers' Comp":'#C9A84C',Other:'#5A5248'};
+const ATTY_COLORS = ['#C9A84C','#A52020','#4A90C4','#4A9C6A','#7B68C8','#C0392B','#E2C06A','#2E7D52','#8B6914','#5A5248','#888'];
+const ACTIVE_ATTORNEYS = ['Doug Rohan','Esti Afanador','Kevin Schumaker','Morgan Carroll','David Schaefer'];
 
-const STATUSES     = ['Open','Closed','Pending'];
-const AREAS        = ['Criminal','Personal Injury',"Workers' Comp",'Other'];
-const STATUS_COLORS= {Open:'#4A90C4',Closed:'#4A9C6A',Pending:'#C9A84C'};
-const AREA_COLORS  = {Criminal:'#A52020','Personal Injury':'#4A9C6A',"Workers' Comp":'#C9A84C',Other:'#5A5248'};
-const ATTY_COLORS  = ['#C9A84C','#A52020','#4A90C4','#4A9C6A','#7B68C8','#C0392B','#E2C06A','#2E7D52','#8B6914','#5A5248','#888'];
-const CAT_COLORS   = {CR:'#A52020',PI:'#4A9C6A',WC:'#C9A84C'};
+// Chart instances — keyed by canvas id
+const CHARTS = {};
 
-// ── Chart instances ───────────────────────────────────────────────────────────
-let statusChart, areaChart, yearChart, monthChart, velocityChart, daysChart;
+// Map instances
+const MAPS = {};
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  API LAYER
+//  API
 // ══════════════════════════════════════════════════════════════════════════════
-
 const FIELDS = [
   'id','status','open_date','close_date',
   'practice_area%7Bid%2Cname%7D',
@@ -580,699 +673,625 @@ async function apiGet(path) {
   const workerUrl = `https://clio-proxy.mitchell-173.workers.dev/?path=${encodeURIComponent(path)}`;
   const res = await fetch(workerUrl);
   const text = await res.text();
-  if (!res.ok) {
-    throw new Error(`Worker error ${res.status}: ${text}`);
-  }
-  try {
-    return JSON.parse(text);
-  } catch(e) {
-    throw new Error(`JSON parse error: ${text.substring(0, 200)}`);
-  }
-}
-
-async function refreshToken() {
-  try {
-    const res = await fetch(`${CONFIG.base_url}/oauth/token`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        grant_type:    'refresh_token',
-        refresh_token: CONFIG.refresh_token,
-        client_id:     CONFIG.client_id,
-        client_secret: CONFIG.client_secret,
-      })
-    });
-    if (!res.ok) return false;
-    const data = await res.json();
-    CONFIG.access_token  = data.access_token;
-    CONFIG.refresh_token = data.refresh_token || CONFIG.refresh_token;
-    return true;
-  } catch { return false; }
+  if (!res.ok) throw new Error(`Worker error ${res.status}: ${text}`);
+  try { return JSON.parse(text); }
+  catch(e) { throw new Error(`JSON parse error: ${text.substring(0,200)}`); }
 }
 
 async function fetchAllMatters() {
   const allMatters = [];
   let pageToken = null;
   let page = 0;
-
-  // Get total count first
   const first = await apiGet(`/api/v4/matters.json?limit=200&fields=${FIELDS}`);
-if (!first || !first.data) throw new Error('Bad response shape: ' + JSON.stringify(first).substring(0, 200));
-const total = first?.meta?.paging?.total_count || first.data.length;
-const totalPages = Math.ceil(total / 200);
-
-allMatters.push(...(first.data || []));
-pageToken = first?.meta?.paging?.next || null;
-page = 1;
-
+  if (!first || !first.data) throw new Error('Bad response: ' + JSON.stringify(first).substring(0,200));
+  const total = first?.meta?.paging?.total_count || first.data.length;
+  const totalPages = Math.ceil(total / 200);
+  allMatters.push(...(first.data || []));
+  pageToken = first?.meta?.paging?.next || null;
+  page = 1;
   setLoadProgress(page, totalPages, allMatters.length, total);
-
   while (pageToken) {
     await sleep(100);
-    while (pageToken) {
-  await sleep(100);
-  const json = await apiGet(`/api/v4/matters.json?limit=200&fields=${FIELDS}&page_token=${pageToken}`);
-  allMatters.push(...(json.data || []));
-  pageToken = json?.meta?.paging?.next || null;
-  page++;
-  setLoadProgress(page, totalPages, allMatters.length, total);
-}
+    const json = await apiGet(`/api/v4/matters.json?limit=200&fields=${FIELDS}&page_token=${pageToken}`);
+    allMatters.push(...(json.data || []));
+    pageToken = json?.meta?.paging?.next || null;
     page++;
     setLoadProgress(page, totalPages, allMatters.length, total);
-}
-
+  }
   return allMatters;
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  DATA PROCESSING — converts raw API matters into dashboard datasets
+//  HELPERS
 // ══════════════════════════════════════════════════════════════════════════════
-
-function categorizePracticeArea(paName) {
-  if (!paName) return 'Other';
-  if (paName.startsWith('Criminal')) return 'Criminal';
-  if (paName.startsWith('Personal Injury')) return 'Personal Injury';
-  if (paName.startsWith("Workers' Comp") || paName.startsWith('Workers Comp')) return "Workers' Comp";
-  return 'Other';
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function fmtMoney(n){if(!n)return'$0';if(n>=1000000)return'$'+(n/1000000).toFixed(1)+'M';if(n>=1000)return'$'+(n/1000).toFixed(0)+'K';return'$'+Math.round(n).toLocaleString();}
+function daysBetween(d1,d2){if(!d1||!d2)return null;return Math.round((new Date(d2)-new Date(d1))/86400000);}
+function categorizePracticeArea(paName){
+  if(!paName)return'Other';
+  if(paName.startsWith('Criminal'))return'Criminal';
+  if(paName.startsWith('Personal Injury'))return'Personal Injury';
+  if(paName.startsWith("Workers' Comp")||paName.startsWith('Workers Comp'))return"Workers' Comp";
+  return'Other';
 }
+function getCF(m,fieldName){const cfv=m.custom_field_values||[];const f=cfv.find(c=>c.field_name===fieldName);return f?f.value:null;}
 
-function getCF(matter, fieldName) {
-  const cfv = matter.custom_field_values || [];
-  const f = cfv.find(c => c.field_name === fieldName);
-  return f ? f.value : null;
-}
-
-function daysBetween(d1, d2) {
-  if (!d1 || !d2) return null;
-  return Math.round((new Date(d2) - new Date(d1)) / 86400000);
-}
-
-function processMatters(matters) {
-  // Reset all datasets
-  MATRIX = {};
-  AREA_DETAIL = {};
-  STATUSES.forEach(s => AREAS.forEach(a => {
-    MATRIX[`${s}|${a}`] = { count: 0, avgDur: null, durSum: 0, durCount: 0 };
-    AREA_DETAIL[`${s}|${a}`] = {};
-  }));
-
-  const attyMap   = { all: {}, Open: {}, Closed: {}, Pending: {} };
-  const cityMap   = {};
-  const langMap   = {};
-  const settlByArea = {};
-  const feesByArea  = {};
-  const yearMap   = {};
-  const monthMap  = {};
-  const velocityMap = {};
-
-  const now = new Date();
-  const cutoffVelocity = new Date(now);
-  cutoffVelocity.setMonth(cutoffVelocity.getMonth() - 24);
-
-  matters.forEach(m => {
-    const status = m.status || 'Open';
+// Filter matters by area and optional sub-area (exact paName match)
+function filterMatters(area, subarea=null) {
+  return ALL_MATTERS.filter(m => {
     const paName = m.practice_area?.name || null;
-    const area   = categorizePracticeArea(paName);
-    const key    = `${status}|${area}`;
+    const cat = categorizePracticeArea(paName);
+    if (cat !== area) return false;
+    if (subarea && subarea !== 'all' && paName !== subarea) return false;
+    return true;
+  });
+}
 
-    // Matrix counts
-    if (!MATRIX[key]) MATRIX[key] = { count: 0, durSum: 0, durCount: 0 };
-    MATRIX[key].count++;
+// ── Chart helpers ─────────────────────────────────────────────────────────────
+const ttCfg={backgroundColor:'#221E1A',titleColor:'#C9A84C',bodyColor:'#9E9080',borderColor:'rgba(201,168,76,0.2)',borderWidth:1,cornerRadius:6};
+const gridColor='rgba(255,255,255,0.05)', tickColor='#5A5248';
+const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...ttCfg}}};
 
-    // Sub-area detail
-    if (!AREA_DETAIL[key]) AREA_DETAIL[key] = {};
-    const subKey = paName || 'Unknown';
-    AREA_DETAIL[key][subKey] = (AREA_DETAIL[key][subKey] || 0) + 1;
+function mkChart(id, config) {
+  if (CHARTS[id]) CHARTS[id].destroy();
+  const el = document.getElementById(id);
+  if (!el) return;
+  CHARTS[id] = new Chart(el, config);
+}
 
-    // Duration
-    if (status === 'Closed' && m.open_date && m.close_date) {
-      const d = daysBetween(m.open_date, m.close_date);
-      if (d !== null && d >= 0 && d < 10000) {
-        MATRIX[key].durSum += d;
-        MATRIX[key].durCount++;
-      }
-    }
+function makeLegend(id, items) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = items.map(({label,color}) =>
+    `<span class="legend-item"><span class="legend-dot" style="background:${color}"></span>${label}</span>`
+  ).join('');
+}
 
-    // Attorneys
-const atty = m.responsible_attorney?.name || '(unassigned)';
-const attyKey2 = `${status}|${area}`;
-attyMap.all[atty] = (attyMap.all[atty] || 0) + 1;
-if (!attyMap[status]) attyMap[status] = {};
-attyMap[status][atty] = (attyMap[status][atty] || 0) + 1;
-if (!attyMap[attyKey2]) attyMap[attyKey2] = {};
-attyMap[attyKey2][atty] = (attyMap[attyKey2][atty] || 0) + 1;
+function renderBars(id, data, colorFn, lw=160, valFmt=null) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (!data || !data.length) { el.innerHTML='<p style="font-size:12px;color:var(--text-3);padding:8px 0">No data available.</p>'; return; }
+  const max = Math.max(...data.map(d=>d.val||d.count||d.c||d.sum||d.days||0));
+  el.innerHTML = data.map((d,i) => {
+    const label = d.label||d.area||d.a||d.lang||d.name||'';
+    const val   = d.val||d.count||d.c||d.sum||d.days||0;
+    const pct   = max>0?Math.round(val/max*100):0;
+    const color = typeof colorFn==='function'?colorFn(d,i):(d.color||'#C9A84C');
+    const display = valFmt?valFmt(val):val.toLocaleString();
+    return `<div class="bar-row"><div class="bar-label" style="width:${lw}px" title="${label}">${label}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><div class="bar-val">${display}</div></div>`;
+  }).join('');
+}
 
-    // City
-    const city = m.client?.name ? null : null; // city comes from custom fields
-    const cfCity = getCF(m, 'Address City') || getCF(m, 'Client City');
-    if (cfCity && cfCity.trim()) {
-      const c = cfCity.trim();
-      cityMap[c] = (cityMap[c] || 0) + 1;
-    }
-
-    // Only process selected custom fields
-   const WANTED_CF = new Set(['Preferred Language','Referral Source','Settlement Amount','Attorney Fees','Total Awards','Court','Judge']);
-   const cfv = m.custom_field_values || [];
-   m.custom_field_values = cfv.filter(c => WANTED_CF.has(c.field_name));
-
-    // Language
-    const lang = getCF(m, 'Preferred Language');
-    if (lang && lang.trim()) {
-      const l = lang.trim().toLowerCase();
-      const normalized = l.startsWith('sp') || l === 'es' ? 'Spanish' :
-                         l.startsWith('en') ? 'English' : lang.trim();
-      langMap[normalized] = (langMap[normalized] || 0) + 1;
-    }
-
-    // Settlement & fees
-    const settlement = getCF(m, 'Settlement Amount');
-    const fees       = getCF(m, 'Attorney Fees');
-    if (settlement && Number(settlement) > 0) {
-      if (!settlByArea[area]) settlByArea[area] = 0;
-      settlByArea[area] += Number(settlement);
-    }
-    if (fees && Number(fees) > 0) {
-      if (!feesByArea[area]) feesByArea[area] = 0;
-      feesByArea[area] += Number(fees);
-    }
-
-    // Year data
-    if (m.open_date) {
-      const yr = m.open_date.substring(0, 4);
-      if (!yearMap[yr]) yearMap[yr] = { Open: 0, Closed: 0, Pending: 0 };
-      yearMap[yr][status] = (yearMap[yr][status] || 0) + 1;
-    }
-
-    // Month data (current year)
-    if (m.open_date) {
-      const d = new Date(m.open_date);
-      const yr = d.getFullYear();
-      const currentYear = now.getFullYear();
-      if (yr === currentYear) {
-        const mn = d.toLocaleString('en-US', { month: 'short' });
-        if (!monthMap[mn]) monthMap[mn] = { Open: 0, Closed: 0, Pending: 0 };
-        monthMap[mn][status] = (monthMap[mn][status] || 0) + 1;
-      }
-    }
-
-    // Velocity (last 24 months)
+function buildVelocityChart(canvasId, legendId, matters) {
+  const now = new Date();
+  const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth()-24);
+  const vMap = {};
+  matters.forEach(m => {
     if (m.open_date) {
       const od = new Date(m.open_date);
-      if (od >= cutoffVelocity) {
-        const mk = od.toLocaleString('en-US', { month: 'short', year: '2-digit' });
-        if (!velocityMap[mk]) velocityMap[mk] = { o: 0, c: 0, date: od };
-        velocityMap[mk].o++;
+      if (od >= cutoff) {
+        const mk = od.toLocaleString('en-US',{month:'short',year:'2-digit'});
+        if (!vMap[mk]) vMap[mk]={o:0,c:0,date:od};
+        vMap[mk].o++;
       }
     }
-    if (m.close_date && status === 'Closed') {
+    if (m.close_date && m.status==='Closed') {
       const cd = new Date(m.close_date);
-      if (cd >= cutoffVelocity) {
-        const mk = cd.toLocaleString('en-US', { month: 'short', year: '2-digit' });
-        if (!velocityMap[mk]) velocityMap[mk] = { o: 0, c: 0, date: cd };
-        velocityMap[mk].c++;
+      if (cd >= cutoff) {
+        const mk = cd.toLocaleString('en-US',{month:'short',year:'2-digit'});
+        if (!vMap[mk]) vMap[mk]={o:0,c:0,date:cd};
+        vMap[mk].c++;
       }
     }
   });
-
-  // Finalize avgDur
-  Object.keys(MATRIX).forEach(k => {
-    const d = MATRIX[k];
-    d.avgDur = d.durCount > 0 ? Math.round(d.durSum / d.durCount) : null;
-  });
-
-  // Convert area detail to arrays
-  Object.keys(AREA_DETAIL).forEach(k => {
-    AREA_DETAIL[k] = Object.entries(AREA_DETAIL[k])
-      .map(([area, count]) => ({ area, count }))
-      .sort((a, b) => b.count - a.count);
-  });
-
-  // Attorney arrays
- const sortAtty = obj => Object.entries(obj)
-  .map(([a, c]) => ({ a, c }))
-  .sort((x, y) => y.c - x.c)
-  .slice(0, 12);
-ATTORNEY_DATA = { all: sortAtty(attyMap.all) };
-STATUSES.forEach(s => {
-  ATTORNEY_DATA[s] = sortAtty(attyMap[s] || {});
-  AREAS.forEach(a => {
-    ATTORNEY_DATA[`${s}|${a}`] = sortAtty(attyMap[`${s}|${a}`] || {});
-  });
-});
-AREAS.forEach(a => {
-  ATTORNEY_DATA[`all|${a}`] = sortAtty(
-    STATUSES.reduce((acc, s) => {
-      Object.entries(attyMap[`${s}|${a}`] || {}).forEach(([k,v]) => acc[k] = (acc[k]||0)+v);
-      return acc;
-    }, {})
-  );
-});
-  // Cities — merge with geo data
-  CITIES = Object.entries(cityMap)
-    .map(([city, count]) => {
-      const geo = CITY_GEO[city.toLowerCase()];
-      return geo ? { city, count, lat: geo.lat, lng: geo.lng } : null;
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.count - a.count);
-
-  // Languages
-  LANGUAGES = Object.entries(langMap)
-    .map(([lang, count]) => ({ lang, count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 10);
-
-  // Settlements & fees
-  SETTLEMENTS = Object.entries(settlByArea)
-    .map(([area, sum]) => ({ area, sum }))
-    .sort((a, b) => b.sum - a.sum);
-  FEES = Object.entries(feesByArea)
-    .map(([area, sum]) => ({ area, sum }))
-    .sort((a, b) => b.sum - a.sum);
-
-  // Days to close by sub-area
-  const subDurMap = {};
-  matters.forEach(m => {
-    if (m.status === 'Closed' && m.open_date && m.close_date) {
-      const paName = m.practice_area?.name || 'Unknown';
-      const d = daysBetween(m.open_date, m.close_date);
-      if (d !== null && d >= 0 && d < 10000) {
-        if (!subDurMap[paName]) subDurMap[paName] = { sum: 0, count: 0 };
-        subDurMap[paName].sum   += d;
-        subDurMap[paName].count += 1;
-      }
-    }
-  });
-  DAYS_DATA = Object.entries(subDurMap)
-    .filter(([, v]) => v.count >= 3)
-    .map(([area, v]) => {
-      const cat = area.startsWith('Personal Injury') ? 'PI' :
-                  area.startsWith("Workers'") ? 'WC' : 'CR';
-      return { area, days: Math.round(v.sum / v.count), cat };
-    })
-    .sort((a, b) => b.days - a.days)
-    .slice(0, 14);
-
-    // Avg days to close by attorney
-const attyDurMap = {};
-matters.forEach(m => {
-  if (m.status === 'Closed' && m.open_date && m.close_date) {
-    const atty = m.responsible_attorney?.name || '(unassigned)';
-    const d = daysBetween(m.open_date, m.close_date);
-    if (d !== null && d >= 0 && d < 10000) {
-      if (!attyDurMap[atty]) attyDurMap[atty] = { sum: 0, count: 0 };
-      attyDurMap[atty].sum   += d;
-      attyDurMap[atty].count += 1;
-    }
-  }
-});
-const ACTIVE_ATTORNEYS = ['Doug Rohan', 'Esti Afanador', 'Kevin Schumaker', 'Morgan Carroll', 'David Schaefer'];
-ATTY_DAYS_DATA = Object.entries(attyDurMap)
-  .filter(([a, v]) => ACTIVE_ATTORNEYS.includes(a) && v.count >= 3)
-  .map(([a, v]) => ({ area: a, days: Math.round(v.sum / v.count) }))
-  .sort((a, b) => b.days - a.days);
-
-  // Year data array
-  YEAR_DATA = Object.entries(yearMap)
-  .sort(([a], [b]) => a.localeCompare(b))
-  .filter(([year]) => parseInt(year) >= 2012)
-  .map(([year, v]) => ({ year, ...v }));
-
-  // Month data array (ordered)
-  const MONTH_ORDER = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  MONTH_DATA = MONTH_ORDER
-    .filter(mn => monthMap[mn])
-    .map(mn => ({ month: mn, ...monthMap[mn] }));
-
-  // Velocity array (ordered by date)
-  VELOCITY_DATA = Object.entries(velocityMap)
-    .sort(([, a], [, b]) => a.date - b.date)
-    .map(([m, v]) => ({ m, o: v.o, c: v.c }));
+  const vData = Object.entries(vMap).sort(([,a],[,b])=>a.date-b.date).map(([m,v])=>({m,o:v.o,c:v.c}));
+  mkChart(canvasId,{type:'line',data:{labels:vData.map(d=>d.m),datasets:[
+    {label:'Opened',data:vData.map(d=>d.o),borderColor:'#4A90C4',backgroundColor:'rgba(74,144,196,0.08)',borderWidth:2,pointRadius:3,pointHoverRadius:5,fill:true,tension:0.3},
+    {label:'Closed',data:vData.map(d=>d.c),borderColor:'#4A9C6A',backgroundColor:'rgba(74,156,106,0.08)',borderWidth:2,pointRadius:3,pointHoverRadius:5,fill:true,tension:0.3},
+  ]},options:{...baseOpts,plugins:{...baseOpts.plugins,tooltip:{...ttCfg,callbacks:{afterBody:ctx=>{const o=vData[ctx[0].dataIndex]?.o||0;const c=vData[ctx[0].dataIndex]?.c||0;const d=o-c;return d>0?`Net: +${d} (backlog growing)`:`Net: ${d} (backlog shrinking)`;}}}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10},maxRotation:45,autoSkip:false},border:{display:false}},y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:11}},border:{display:false},beginAtZero:true}}}});
+  makeLegend(legendId,[{label:'Opened',color:'#4A90C4'},{label:'Closed',color:'#4A9C6A'}]);
 }
 
-function useFallback() {
-  // Use hardcoded data
-  MATRIX = {};
-  STATUSES.forEach(s => AREAS.forEach(a => {
-    const fb = FB_MATRIX[`${s}|${a}`] || { count: 0, avgDur: null };
-    MATRIX[`${s}|${a}`] = { count: fb.count, avgDur: fb.avgDur };
-  }));
-  YEAR_DATA     = FB_YEAR_DATA;
-  MONTH_DATA    = FB_MONTH_DATA;
-  VELOCITY_DATA = FB_VELOCITY_DATA;
-  DAYS_DATA     = FB_DAYS_DATA;
-  ATTORNEY_DATA = FB_ATTORNEY_DATA;
-  CITIES        = FB_CITIES;
-  LANGUAGES     = [];
-  SETTLEMENTS   = [];
-  FEES          = [];
-  AREA_DETAIL   = {};
+function buildYearChart(canvasId, legendId, matters) {
+  const yMap = {};
+  matters.forEach(m => {
+    if (m.open_date) {
+      const yr = m.open_date.substring(0,4);
+      if (parseInt(yr) < 2012) return;
+      if (!yMap[yr]) yMap[yr]={Open:0,Closed:0,Pending:0};
+      yMap[yr][m.status||'Open']=(yMap[yr][m.status||'Open']||0)+1;
+    }
+  });
+  const yData = Object.entries(yMap).sort(([a],[b])=>a.localeCompare(b)).map(([year,v])=>({year,...v}));
+  const ds = STATUSES.map(s=>({label:s,data:yData.map(y=>y[s]||0),backgroundColor:STATUS_COLORS[s],borderRadius:3,borderSkipped:false}));
+  mkChart(canvasId,{type:'bar',data:{labels:yData.map(d=>d.year),datasets:ds},options:{...baseOpts,scales:{x:{stacked:true,grid:{display:false},ticks:{color:tickColor,font:{size:11},autoSkip:false,maxRotation:0},border:{display:false}},y:{stacked:true,grid:{color:gridColor},ticks:{color:tickColor,font:{size:11}},border:{display:false}}}}});
+  makeLegend(legendId,STATUSES.map(s=>({label:s,color:STATUS_COLORS[s]})));
+}
+
+function buildMonthChart(canvasId, legendId, matters) {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const mMap = {};
+  matters.forEach(m => {
+    if (m.open_date) {
+      const d = new Date(m.open_date);
+      if (d.getFullYear()===currentYear) {
+        const mn = d.toLocaleString('en-US',{month:'short'});
+        if (!mMap[mn]) mMap[mn]={Open:0,Closed:0,Pending:0};
+        mMap[mn][m.status||'Open']=(mMap[mn][m.status||'Open']||0)+1;
+      }
+    }
+  });
+  const MONTH_ORDER=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const mData = MONTH_ORDER.filter(mn=>mMap[mn]).map(mn=>({month:mn,...mMap[mn]}));
+  const ds = STATUSES.map(s=>({label:s,data:mData.map(y=>y[s]||0),backgroundColor:STATUS_COLORS[s],borderRadius:3,borderSkipped:false}));
+  mkChart(canvasId,{type:'bar',data:{labels:mData.map(d=>d.month),datasets:ds},options:{...baseOpts,scales:{x:{stacked:true,grid:{display:false},ticks:{color:tickColor,font:{size:11},autoSkip:false,maxRotation:0},border:{display:false}},y:{stacked:true,grid:{color:gridColor},ticks:{color:tickColor,font:{size:11}},border:{display:false}}}}});
+  makeLegend(legendId,STATUSES.map(s=>({label:s,color:STATUS_COLORS[s]})));
+}
+
+function calcMetrics(matters) {
+  let open=0,closed=0,pending=0,durSum=0,durCount=0;
+  matters.forEach(m=>{
+    if(m.status==='Open')open++;
+    else if(m.status==='Closed'){closed++;const d=daysBetween(m.open_date,m.close_date);if(d!==null&&d>=0&&d<10000){durSum+=d;durCount++;}}
+    else if(m.status==='Pending')pending++;
+  });
+  return{total:open+closed+pending,open,closed,pending,avgDur:durCount?Math.round(durSum/durCount):null};
+}
+
+function setMetrics(prefix,{total,open,closed,pending,avgDur}) {
+  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  s(`${prefix}-total`,total.toLocaleString());
+  s(`${prefix}-open`,open.toLocaleString());
+  s(`${prefix}-open-sub`,total>0?Math.round(open/total*100)+'% of total':'');
+  s(`${prefix}-closed`,closed.toLocaleString());
+  s(`${prefix}-closed-sub`,total>0?Math.round(closed/total*100)+'% of total':'');
+  s(`${prefix}-pending`,pending.toLocaleString());
+  s(`${prefix}-pending-sub`,total>0?Math.round(pending/total*100)+'% of total':'');
+  s(`${prefix}-dur`,avgDur?avgDur.toLocaleString():'—');
+}
+
+function buildAttyBars(id, matters, lw=145) {
+  const map={};
+  matters.forEach(m=>{const a=m.responsible_attorney?.name||'(unassigned)';map[a]=(map[a]||0)+1;});
+  const data=Object.entries(map).map(([a,count])=>({label:a,count})).sort((a,b)=>b.count-a.count).slice(0,12);
+  renderBars(id,data,(_,i)=>ATTY_COLORS[i%ATTY_COLORS.length],lw);
+}
+
+function buildAttyDaysBars(id, matters, lw=155) {
+  const map={};
+  matters.forEach(m=>{
+    if(m.status==='Closed'&&m.open_date&&m.close_date){
+      const a=m.responsible_attorney?.name||'(unassigned)';
+      const d=daysBetween(m.open_date,m.close_date);
+      if(d!==null&&d>=0&&d<10000){if(!map[a])map[a]={sum:0,count:0};map[a].sum+=d;map[a].count++;}
+    }
+  });
+  const data=Object.entries(map)
+    .filter(([a,v])=>ACTIVE_ATTORNEYS.includes(a)&&v.count>=3)
+    .map(([a,v])=>({label:a,days:Math.round(v.sum/v.count)}))
+    .sort((a,b)=>b.days-a.days);
+  renderBars(id,data,()=>'#4A90C4',lw,v=>`${v} days`);
+}
+
+function buildSubareaDaysBars(id, matters, areaPrefix, color, lw=155) {
+  const map={};
+  matters.forEach(m=>{
+    if(m.status==='Closed'&&m.open_date&&m.close_date){
+      const pa=m.practice_area?.name||'Unknown';
+      const d=daysBetween(m.open_date,m.close_date);
+      if(d!==null&&d>=0&&d<10000){if(!map[pa])map[pa]={sum:0,count:0};map[pa].sum+=d;map[pa].count++;}
+    }
+  });
+  const data=Object.entries(map).filter(([,v])=>v.count>=3)
+    .map(([a,v])=>({label:a,days:Math.round(v.sum/v.count)}))
+    .sort((a,b)=>b.days-a.days).slice(0,12);
+  renderBars(id,data,()=>color,lw,v=>`${v} days`);
+}
+
+function buildSettlementBars(id, matters, colorFn, lw=155) {
+  const map={};
+  matters.forEach(m=>{
+    const s=getCF(m,'Settlement Amount');
+    if(s&&Number(s)>0){const pa=m.practice_area?.name||'Unknown';if(!map[pa])map[pa]=0;map[pa]+=Number(s);}
+  });
+  const data=Object.entries(map).map(([label,sum])=>({label,sum})).sort((a,b)=>b.sum-a.sum);
+  renderBars(id,data,colorFn,lw,fmtMoney);
+}
+
+function buildFeesBars(id, matters, colorFn, lw=155) {
+  const map={};
+  matters.forEach(m=>{
+    const f=getCF(m,'Attorney Fees');
+    if(f&&Number(f)>0){const pa=m.practice_area?.name||'Unknown';if(!map[pa])map[pa]=0;map[pa]+=Number(f);}
+  });
+  const data=Object.entries(map).map(([label,sum])=>({label,sum})).sort((a,b)=>b.sum-a.sum);
+  renderBars(id,data,colorFn,lw,fmtMoney);
+}
+
+function totalSettlement(matters) {
+  return matters.reduce((acc,m)=>{const s=getCF(m,'Settlement Amount');return acc+(s&&Number(s)>0?Number(s):0);},0);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  MAP
+// ══════════════════════════════════════════════════════════════════════════════
+function initMap(mapId) {
+  if (MAPS[mapId]) return;
+  const m = L.map(mapId,{center:[33.92,-84.25],zoom:10,zoomControl:true,attributionControl:true});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+    subdomains:'abcd',maxZoom:16,
+  }).addTo(m);
+  MAPS[mapId] = {map:m, layers:[]};
+}
+
+function drawMap(mapId, matters, bubbleColor='#8B1A1A') {
+  if (!MAPS[mapId]) initMap(mapId);
+  const {map, layers} = MAPS[mapId];
+  layers.forEach(l=>map.removeLayer(l));
+  MAPS[mapId].layers=[];
+  // Build city counts from matters
+  const cityMap={};
+  matters.forEach(m=>{
+    // Try to get city from matter — use fallback city data keyed by matter ID isn't available
+    // We use the global city distribution proportionally for practice-area maps
+  });
+  // For filtered pages, use proportional distribution from FB_CITIES since we don't have per-matter city
+  // For overview, use all cities
+  const citiesToDraw = matters === ALL_MATTERS
+    ? FB_CITIES
+    : buildCityCountsFromMatters(matters);
+  if (!citiesToDraw.length) return;
+  const maxCount=Math.max(...citiesToDraw.map(c=>c.count));
+  const maxR=48,minR=7;
+  citiesToDraw.forEach(c=>{
+    const r=minR+(c.count/maxCount)*(maxR-minR);
+    const circle=L.circleMarker([c.lat,c.lng],{radius:r,fillColor:bubbleColor,fillOpacity:0.55,color:'#C9A84C',weight:1.5,opacity:0.85});
+    circle.bindPopup(`<div class="popup-city">${c.city}</div><div class="popup-count">${c.count.toLocaleString()} clients</div>`,{closeButton:true,offset:[0,-4]});
+    if(c.count>=20) circle.bindTooltip(c.city,{permanent:true,direction:'center',className:'bubble-label',offset:[0,0]});
+    circle.addTo(map);
+    MAPS[mapId].layers.push(circle);
+  });
+  setTimeout(()=>map.invalidateSize(),100);
+}
+
+function buildCityCountsFromMatters(matters) {
+  // Since client city isn't directly on the matter record from API,
+  // we scale the fallback city distribution proportionally to the filtered set
+  const filteredTotal = matters.length;
+  const allTotal = ALL_MATTERS.length;
+  if (!allTotal) return [];
+  const ratio = filteredTotal / allTotal;
+  return FB_CITIES.map(c=>({...c, count:Math.max(1,Math.round(c.count*ratio))}))
+    .filter(c=>c.count>=1)
+    .sort((a,b)=>b.count-a.count)
+    .slice(0,20);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  PAGE RENDERERS
+// ══════════════════════════════════════════════════════════════════════════════
+
+function renderOverview() {
+  const m = ALL_MATTERS;
+  const metrics = calcMetrics(m);
+  // Use all matters for overview totals
+  let open=0,closed=0,pending=0,durSum=0,durCount=0;
+  const byArea={};
+  AREAS.forEach(a=>byArea[a]={Open:0,Closed:0,Pending:0,total:0});
+  m.forEach(mat=>{
+    const area=categorizePracticeArea(mat.practice_area?.name);
+    if(mat.status==='Open'){open++;byArea[area].Open++;}
+    else if(mat.status==='Closed'){closed++;byArea[area].Closed++;const d=daysBetween(mat.open_date,mat.close_date);if(d!==null&&d>=0&&d<10000){durSum+=d;durCount++;}}
+    else if(mat.status==='Pending'){pending++;byArea[area].Pending++;}
+    byArea[area].total++;
+  });
+  const total=open+closed+pending;
+  const avgDur=durCount?Math.round(durSum/durCount):null;
+  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  s('ov-total',total.toLocaleString());
+  s('ov-open',open.toLocaleString()); s('ov-open-sub',total>0?Math.round(open/total*100)+'% of total':'');
+  s('ov-closed',closed.toLocaleString()); s('ov-closed-sub',total>0?Math.round(closed/total*100)+'% of total':'');
+  s('ov-pending',pending.toLocaleString()); s('ov-pending-sub',total>0?Math.round(pending/total*100)+'% of total':'');
+  s('ov-dur',avgDur?avgDur.toLocaleString():'—');
+
+  // Area donut
+  const aLabels=AREAS.filter(a=>byArea[a].total>0);
+  mkChart('ov-areaChart',{type:'doughnut',data:{labels:aLabels,datasets:[{data:aLabels.map(a=>byArea[a].total),backgroundColor:aLabels.map(a=>AREA_COLORS[a]),borderWidth:0,hoverOffset:6}]},options:{...baseOpts,cutout:'65%'}});
+  makeLegend('ov-areaLegend',aLabels.map(a=>({label:`${a} — ${byArea[a].total.toLocaleString()}`,color:AREA_COLORS[a]})));
+
+  // Practice area bars
+  const paMap={};
+  m.forEach(mat=>{const pa=mat.practice_area?.name||'Unknown';paMap[pa]=(paMap[pa]||0)+1;});
+  const paData=Object.entries(paMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,10);
+  renderBars('ov-practiceAreaBars',paData,d=>{
+    const a=d.label;
+    if(a.startsWith('Criminal'))return'#A52020';
+    if(a.startsWith('Personal Injury'))return'#4A9C6A';
+    if(a.startsWith("Workers'"))return'#C9A84C';
+    return'#5A5248';
+  },155);
+
+  buildAttyBars('ov-attorneyBars',m,145);
+  buildVelocityChart('ov-velocityChart','ov-velocityLegend',m);
+  buildYearChart('ov-yearChart','ov-yearLegend',m);
+  buildMonthChart('ov-monthChart','ov-monthLegend',m);
+
+  // Days by sub-area
+  const subDurMap={};
+  m.forEach(mat=>{
+    if(mat.status==='Closed'&&mat.open_date&&mat.close_date){
+      const pa=mat.practice_area?.name||'Unknown';
+      const d=daysBetween(mat.open_date,mat.close_date);
+      if(d!==null&&d>=0&&d<10000){if(!subDurMap[pa])subDurMap[pa]={sum:0,count:0};subDurMap[pa].sum+=d;subDurMap[pa].count++;}
+    }
+  });
+  const daysData=Object.entries(subDurMap).filter(([,v])=>v.count>=3)
+    .map(([area,v])=>{const cat=area.startsWith('Personal Injury')?'PI':area.startsWith("Workers'")?'WC':'CR';return{area,days:Math.round(v.sum/v.count),cat};})
+    .sort((a,b)=>b.days-a.days).slice(0,14);
+  mkChart('ov-daysChart',{type:'bar',data:{labels:daysData.map(d=>d.area),datasets:[{data:daysData.map(d=>d.days),backgroundColor:daysData.map(d=>d.cat==='PI'?'#4A9C6A':d.cat==='WC'?'#C9A84C':'#A52020'),borderRadius:3,borderSkipped:false}]},options:{...baseOpts,indexAxis:'y',plugins:{...baseOpts.plugins,tooltip:{...ttCfg,callbacks:{label:ctx=>`${ctx.raw} avg days`}}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10}},border:{display:false}},y:{grid:{display:false},ticks:{color:tickColor,font:{size:10}},border:{display:false}}}}});
+  buildAttyDaysBars('ov-attyDaysBars',m,155);
+
+  // Language bars
+  const langMap={};
+  m.forEach(mat=>{const lang=getCF(mat,'Preferred Language');if(lang&&lang.trim()){const l=lang.trim().toLowerCase();const n=l.startsWith('sp')||l==='es'?'Spanish':l.startsWith('en')?'English':lang.trim();langMap[n]=(langMap[n]||0)+1;}});
+  const langData=Object.entries(langMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,10);
+  renderBars('ov-languageBars',langData,(_,i)=>['#C9A84C','#4A90C4','#4A9C6A','#A52020','#7B68C8'][i%5],120);
+
+  // City bars (from fallback)
+  const cityData=FB_CITIES.slice(0,15).map(c=>({label:c.city,count:c.count}));
+  renderBars('ov-cityBars',cityData,()=>'#8B1A1A',120);
+
+  drawMap('map-overview',ALL_MATTERS,'#8B1A1A');
+}
+
+function renderCriminal() {
+  const subarea = CURRENT_CR_SUBAREA;
+  const matters = subarea==='all'
+    ? filterMatters('Criminal')
+    : filterMatters('Criminal', subarea);
+
+  const metrics = calcMetrics(matters);
+  setMetrics('cr', metrics);
+
+  const subareaLabel = document.getElementById('cr-subareaLabel');
+  if (subareaLabel) subareaLabel.textContent = subarea==='all' ? 'all sub-areas' : subarea;
+
+  buildVelocityChart('cr-velocityChart','cr-velocityLegend',matters);
+  buildYearChart('cr-yearChart','cr-yearLegend',matters);
+  buildMonthChart('cr-monthChart','cr-monthLegend',matters);
+  buildAttyBars('cr-attorneyBars',matters,145);
+  buildSubareaDaysBars('cr-daysBars',matters,'Criminal','#A52020',155);
+
+  // Court bars
+  const courtMap={};
+  matters.forEach(m=>{const c=getCF(m,'Court');if(c&&c.trim())courtMap[c.trim()]=(courtMap[c.trim()]||0)+1;});
+  const courtData=Object.entries(courtMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,12);
+  renderBars('cr-courtBars',courtData,()=>'#A52020',155);
+
+  // Judge bars
+  const judgeMap={};
+  matters.forEach(m=>{const j=getCF(m,'Judge');if(j&&j.trim())judgeMap[j.trim()]=(judgeMap[j.trim()]||0)+1;});
+  const judgeData=Object.entries(judgeMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,12);
+  renderBars('cr-judgeBars',judgeData,()=>'#C9A84C',155);
+
+  drawMap('map-criminal',matters,'#A52020');
+}
+
+function renderPI() {
+  const matters = filterMatters('Personal Injury');
+  const metrics = calcMetrics(matters);
+  setMetrics('pi', metrics);
+
+  const settle = totalSettlement(matters);
+  const settleEl = document.getElementById('pi-settlement');
+  if (settleEl) settleEl.textContent = fmtMoney(settle);
+  const settleSubEl = document.getElementById('pi-settlement-sub');
+  if (settleSubEl) settleSubEl.textContent = `${matters.filter(m=>getCF(m,'Settlement Amount')>0).length} settled matters`;
+
+  buildVelocityChart('pi-velocityChart','pi-velocityLegend',matters);
+  buildYearChart('pi-yearChart','pi-yearLegend',matters);
+  buildMonthChart('pi-monthChart','pi-monthLegend',matters);
+  buildSubareaDaysBars('pi-daysBars',matters,'Personal Injury','#4A9C6A',160);
+  buildSettlementBars('pi-settlementBars',matters,()=>'#4A9C6A',160);
+  buildFeesBars('pi-feesBars',matters,()=>'#2E7D52',160);
+  buildAttyBars('pi-attorneyBars',matters,145);
+  drawMap('map-pi',matters,'#4A9C6A');
+}
+
+function renderWC() {
+  const matters = filterMatters("Workers' Comp");
+  const metrics = calcMetrics(matters);
+  setMetrics('wc', metrics);
+
+  const settle = totalSettlement(matters);
+  const settleEl = document.getElementById('wc-settlement');
+  if (settleEl) settleEl.textContent = fmtMoney(settle);
+  const settleSubEl = document.getElementById('wc-settlement-sub');
+  if (settleSubEl) settleSubEl.textContent = `${matters.filter(m=>getCF(m,'Settlement Amount')>0).length} settled matters`;
+
+  buildVelocityChart('wc-velocityChart','wc-velocityLegend',matters);
+  buildYearChart('wc-yearChart','wc-yearLegend',matters);
+  buildMonthChart('wc-monthChart','wc-monthLegend',matters);
+  buildAttyDaysBars('wc-daysBars',matters,155);
+  buildSettlementBars('wc-settlementBars',matters,d=>d.label?.startsWith('Personal Injury')?'#4A9C6A':'#C9A84C',155);
+  buildFeesBars('wc-feesBars',matters,()=>'#8B6914',155);
+  buildAttyBars('wc-attorneyBars',matters,145);
+  drawMap('map-wc',matters,'#C9A84C');
+}
+
+function renderOther() {
+  const matters = filterMatters('Other');
+  const metrics = calcMetrics(matters);
+  setMetrics('ot', metrics);
+
+  buildVelocityChart('ot-velocityChart','ot-velocityLegend',matters);
+  buildYearChart('ot-yearChart','ot-yearLegend',matters);
+
+  const paMap={};
+  matters.forEach(m=>{const pa=m.practice_area?.name||'Unknown';paMap[pa]=(paMap[pa]||0)+1;});
+  const paData=Object.entries(paMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,12);
+  renderBars('ot-subareaBar',paData,()=>'#5A5248',155);
+
+  buildAttyBars('ot-attorneyBars',matters,145);
+  buildSubareaDaysBars('ot-daysBars',matters,'','#5A5248',155);
+  drawMap('map-other',matters,'#5A5248');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  PAGE NAVIGATION
+// ══════════════════════════════════════════════════════════════════════════════
+const PAGE_SUBTITLES = {
+  overview: 'Firm overview',
+  criminal: 'Criminal matters',
+  pi: 'Personal injury matters',
+  wc: "Workers' compensation matters",
+  other: 'Other matters',
+};
+
+function switchPage(page) {
+  CURRENT_PAGE = page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(`page-${page}`)?.classList.add('active');
+  document.getElementById(`tab-${page}`)?.classList.add('active');
+  const sub = document.getElementById('pageSubtitle');
+  if (sub) sub.textContent = PAGE_SUBTITLES[page] || '';
+  renderPage(page);
+  // Invalidate maps after page switch
+  setTimeout(()=>{Object.values(MAPS).forEach(m=>m.map?.invalidateSize());},200);
+}
+
+function renderPage(page) {
+  if (!ALL_MATTERS.length) return;
+  if (page==='overview') renderOverview();
+  else if (page==='criminal') renderCriminal();
+  else if (page==='pi') renderPI();
+  else if (page==='wc') renderWC();
+  else if (page==='other') renderOther();
+}
+
+function setCriminalSubarea(subarea, btn) {
+  CURRENT_CR_SUBAREA = subarea;
+  document.querySelectorAll('#cr-subarea-nav .subarea-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCriminal();
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  LOADING UI
 // ══════════════════════════════════════════════════════════════════════════════
-
-function setLoadProgress(page, totalPages, fetched, total) {
-  const pct = Math.min(95, Math.round((page / totalPages) * 100));
-  document.getElementById('loadBar').style.width = pct + '%';
-  document.getElementById('loadStatus').textContent = `Fetching matters… page ${page} of ${totalPages}`;
-  document.getElementById('loadCount').textContent = `${fetched.toLocaleString()} of ${total.toLocaleString()} matters loaded`;
+function setLoadProgress(page,totalPages,fetched,total){
+  const pct=Math.min(95,Math.round((page/totalPages)*100));
+  document.getElementById('loadBar').style.width=pct+'%';
+  document.getElementById('loadStatus').textContent=`Fetching matters… page ${page} of ${totalPages}`;
+  document.getElementById('loadCount').textContent=`${fetched.toLocaleString()} of ${total.toLocaleString()} matters loaded`;
 }
-
-function setLoadMessage(msg, count='') {
-  document.getElementById('loadStatus').textContent = msg;
-  document.getElementById('loadCount').textContent  = count;
+function setLoadMessage(msg,count=''){
+  document.getElementById('loadStatus').textContent=msg;
+  document.getElementById('loadCount').textContent=count;
 }
-
-function finishLoading(mode) {
-  document.getElementById('loadBar').style.width = '100%';
-  const badge = document.getElementById('loadBadge');
-  if (mode === 'offline') {
-    badge.className = 'loading-mode-badge offline';
-    badge.textContent = 'Offline — showing cached data';
-  } else {
-    badge.className = 'loading-mode-badge live';
-    badge.textContent = `Live data · ${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
-  }
-  setTimeout(() => {
-    document.getElementById('loadingScreen').classList.add('fade-out');
-    setTimeout(() => { document.getElementById('loadingScreen').style.display = 'none'; }, 600);
-  }, 700);
+function finishLoading(mode){
+  document.getElementById('loadBar').style.width='100%';
+  const badge=document.getElementById('loadBadge');
+  if(mode==='offline'){badge.className='loading-mode-badge offline';badge.textContent='Offline — showing cached data';}
+  else{badge.className='loading-mode-badge live';badge.textContent=`Live data · ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;}
+  setTimeout(()=>{document.getElementById('loadingScreen').classList.add('fade-out');setTimeout(()=>{document.getElementById('loadingScreen').style.display='none';},600);},700);
 }
-
-function showBanner(mode, asOf) {
-  const banner = document.getElementById('dataBanner');
-  const msg    = document.getElementById('bannerMsg');
-  banner.className = `show ${mode}`;
-  if (mode === 'live') {
-    msg.textContent = `Live data from Clio · Last refreshed ${new Date().toLocaleString([], {dateStyle:'medium',timeStyle:'short'})}`;
-  } else {
-    msg.textContent = `Offline mode — showing cached data as of ${asOf}. Check your token or internet connection.`;
-  }
-  document.getElementById('asOf').textContent = mode === 'live'
-    ? `Live · ${new Date().toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'})}`
-    : `Cached · ${asOf}`;
+function showBanner(mode,asOf){
+  const banner=document.getElementById('dataBanner');
+  const msg=document.getElementById('bannerMsg');
+  banner.className=`show ${mode}`;
+  if(mode==='live')msg.textContent=`Live data from Clio · Last refreshed ${new Date().toLocaleString([],{dateStyle:'medium',timeStyle:'short'})}`;
+  else msg.textContent=`Offline mode — showing cached data as of ${asOf}. Check your token or internet connection.`;
+  document.getElementById('asOf').textContent=mode==='live'?`Live · ${new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'})}`:`Cached · ${asOf}`;
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  MAIN INIT
+//  FALLBACK — build synthetic matters array from hardcoded data
 // ══════════════════════════════════════════════════════════════════════════════
+function buildFallbackMatters() {
+  const matters = [];
+  const areaMap = {
+    'Criminal': 'Criminal', 'Personal Injury': 'Personal Injury',
+    "Workers' Comp": "Workers' Comp (Rohan)", 'Other': 'Referred/Co-Counsel'
+  };
+  let id = 1;
+  const baseDate = new Date('2020-01-01');
+  STATUSES.forEach(status => {
+    AREAS.forEach(area => {
+      const fb = FB_MATRIX[`${status}|${area}`] || {count:0,avgDur:null};
+      for (let i = 0; i < fb.count; i++) {
+        const open_date = new Date(baseDate.getTime() + Math.random()*4*365*86400000);
+        const close_date = status==='Closed'&&fb.avgDur ? new Date(open_date.getTime()+fb.avgDur*86400000) : null;
+        matters.push({
+          id: id++, status,
+          open_date: open_date.toISOString().substring(0,10),
+          close_date: close_date ? close_date.toISOString().substring(0,10) : null,
+          practice_area: { name: areaMap[area] || area },
+          responsible_attorney: { name: 'Doug Rohan' },
+          custom_field_values: [],
+        });
+      }
+    });
+  });
+  return matters;
+}
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════════════════════
 async function init() {
   const tokenMissing = CONFIG.access_token === 'YOUR_ACCESS_TOKEN_HERE';
-
   if (tokenMissing) {
-    setLoadMessage('No token configured — using cached data', 'Edit the CONFIG block at the top of this file');
-    document.getElementById('loadBadge').className = 'loading-mode-badge offline';
-    document.getElementById('loadBadge').textContent = 'Token not set';
+    setLoadMessage('No token configured — using cached data','Edit the CONFIG block at the top of this file');
+    document.getElementById('loadBadge').className='loading-mode-badge offline';
+    document.getElementById('loadBadge').textContent='Token not set';
     await sleep(1200);
-    useFallback();
-    DATA_MODE  = 'offline';
-    DATA_AS_OF = FALLBACK.asOf;
+    ALL_MATTERS = buildFallbackMatters();
+    DATA_MODE='offline'; DATA_AS_OF=FALLBACK_AS_OF;
   } else {
     try {
       setLoadMessage('Connecting to Clio API…');
       const matters = await fetchAllMatters();
-      setLoadMessage('Processing matters…', `${matters.length.toLocaleString()} matters received`);
+      setLoadMessage('Processing matters…',`${matters.length.toLocaleString()} matters received`);
+      // Filter custom fields
+      const WANTED_CF = new Set(['Preferred Language','Referral Source','Settlement Amount','Attorney Fees','Total Awards','Court','Judge']);
+      matters.forEach(m=>{m.custom_field_values=(m.custom_field_values||[]).filter(c=>WANTED_CF.has(c.field_name));});
       await sleep(200);
-      processMatters(matters);
-      DATA_MODE  = 'live';
-      DATA_AS_OF = new Date().toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'});
+      ALL_MATTERS = matters;
+      DATA_MODE='live'; DATA_AS_OF=new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
     } catch(e) {
-      console.warn('API fetch failed, falling back to cached data:', e.message);
-      setLoadMessage('Could not reach Clio — using cached data', e.message);
-      document.getElementById('loadBadge').className = 'loading-mode-badge offline';
-      document.getElementById('loadBadge').textContent = 'Offline — cached data';
+      console.warn('API fetch failed, using fallback:',e.message);
+      setLoadMessage('Could not reach Clio — using cached data',e.message);
+      document.getElementById('loadBadge').className='loading-mode-badge offline';
       await sleep(1500);
-      useFallback();
-      DATA_MODE  = 'offline';
-      DATA_AS_OF = FALLBACK.asOf;
+      ALL_MATTERS = buildFallbackMatters();
+      DATA_MODE='offline'; DATA_AS_OF=FALLBACK_AS_OF;
     }
   }
-
   finishLoading(DATA_MODE);
   showBanner(DATA_MODE, DATA_AS_OF);
-  update();
-  buildStaticCharts();
-  initMap();
-  window.addEventListener('resize', () => { if(leafletMap) leafletMap.invalidateSize(); });
+  renderPage('overview');
+  window.addEventListener('resize',()=>{Object.values(MAPS).forEach(m=>m.map?.invalidateSize());});
 }
 
 async function refreshData() {
-  const btn = document.getElementById('refreshBtn');
-  btn.classList.add('spinning');
-  btn.disabled = true;
+  const btn=document.getElementById('refreshBtn');
+  btn.classList.add('spinning'); btn.disabled=true;
   try {
     const matters = await fetchAllMatters();
-    processMatters(matters);
-    DATA_MODE  = 'live';
-    DATA_AS_OF = new Date().toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'});
-    showBanner('live', DATA_AS_OF);
-    update();
-    buildStaticCharts();
-    drawBubbles();
-  } catch(e) {
-    alert('Refresh failed: ' + e.message);
-  } finally {
-    btn.classList.remove('spinning');
-    btn.disabled = false;
-  }
+    const WANTED_CF = new Set(['Preferred Language','Referral Source','Settlement Amount','Attorney Fees','Total Awards','Court','Judge']);
+    matters.forEach(m=>{m.custom_field_values=(m.custom_field_values||[]).filter(c=>WANTED_CF.has(c.field_name));});
+    ALL_MATTERS=matters;
+    DATA_MODE='live'; DATA_AS_OF=new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
+    showBanner('live',DATA_AS_OF);
+    renderPage(CURRENT_PAGE);
+  } catch(e) { alert('Refresh failed: '+e.message); }
+  finally { btn.classList.remove('spinning'); btn.disabled=false; }
 }
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-// ══════════════════════════════════════════════════════════════════════════════
-//  CHART HELPERS
-// ══════════════════════════════════════════════════════════════════════════════
-
-function fmtMoney(n) {
-  if (!n) return '$0';
-  if (n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
-  if (n >= 1000)    return '$' + (n/1000).toFixed(0) + 'K';
-  return '$' + Math.round(n).toLocaleString();
-}
-
-function getFiltered(statusF, areaF) {
-  const statuses = statusF === 'all' ? STATUSES : [statusF];
-  const areas    = areaF   === 'all' ? AREAS    : [areaF];
-  let total=0, settlement=0, durSum=0, durCount=0;
-  const byStatus={Open:0,Closed:0,Pending:0}, byArea={};
-  AREAS.forEach(a => byArea[a]=0);
-  statuses.forEach(s => areas.forEach(a => {
-    const d = MATRIX[`${s}|${a}`] || {count:0,avgDur:null};
-    total     += d.count;
-    byStatus[s] += d.count;
-    byArea[a]   += d.count;
-    if (d.avgDur && d.count > 0) { durSum += d.avgDur * d.count; durCount += d.count; }
-  }));
-  // Settlement total from SETTLEMENTS (not filtered by status for now)
-  SETTLEMENTS.forEach(s => { settlement += s.sum; });
-  return { total, settlement, avgDur: durCount ? Math.round(durSum/durCount) : null, byStatus, byArea };
-}
-
-function getPADetail(statusF, areaF) {
-  const statuses = statusF === 'all' ? STATUSES : [statusF];
-  const areas    = areaF   === 'all' ? AREAS    : [areaF];
-  const map = {};
-  statuses.forEach(s => areas.forEach(a => {
-    (AREA_DETAIL[`${s}|${a}`] || []).forEach(r => {
-      map[r.area] = (map[r.area] || 0) + r.count;
-    });
-  }));
-  return Object.entries(map).map(([area,count]) => ({area,count})).sort((a,b) => b.count-a.count).slice(0,10);
-}
-
-function renderBars(id, data, colorFn, lw, valFmt) {
-  const el = document.getElementById(id);
-  if (!data || !data.length) { el.innerHTML = '<p style="font-size:12px;color:var(--text-3);padding:8px 0">No data available.</p>'; return; }
-  const max = Math.max(...data.map(d => d.count||d.c||d.sum||d.days||0));
-  el.innerHTML = data.map((d,i) => {
-    const label   = d.source||d.area||d.a||d.lang||'';
-    const val     = d.count||d.c||d.sum||d.days||0;
-    const pct     = max > 0 ? Math.round(val/max*100) : 0;
-    const color   = typeof colorFn === 'function' ? colorFn(d,i) : (d.color||'#C9A84C');
-    const display = valFmt ? valFmt(val) : val.toLocaleString();
-    return `<div class="bar-row"><div class="bar-label" style="width:${lw||160}px" title="${label}">${label}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><div class="bar-val">${display}</div></div>`;
-  }).join('');
-}
-
-function makeLegend(id, items) {
-  document.getElementById(id).innerHTML = items.map(({label,color}) =>
-    `<span class="legend-item"><span class="legend-dot" style="background:${color}"></span>${label}</span>`
-  ).join('');
-}
-
-function stackedDs(src, statusF) {
-  const st = statusF === 'all' ? STATUSES : [statusF];
-  return st.map(s => ({
-    label: s, data: src.map(y => y[s]||0),
-    backgroundColor: STATUS_COLORS[s], borderRadius: 3, borderSkipped: false,
-  }));
-}
-
-const ttCfg = {backgroundColor:'#221E1A',titleColor:'#C9A84C',bodyColor:'#9E9080',borderColor:'rgba(201,168,76,0.2)',borderWidth:1,cornerRadius:6};
-const gridColor='rgba(255,255,255,0.05)', tickColor='#5A5248';
-const baseOpts = {responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...ttCfg}}};
-
-// ── Static charts ─────────────────────────────────────────────────────────────
-function buildStaticCharts() {
-  if(velocityChart) velocityChart.destroy();
-  velocityChart = new Chart(document.getElementById('velocityChart'), {
-    type:'line',
-    data:{
-      labels: VELOCITY_DATA.map(d=>d.m),
-      datasets:[
-        {label:'Opened',data:VELOCITY_DATA.map(d=>d.o),borderColor:'#4A90C4',backgroundColor:'rgba(74,144,196,0.08)',borderWidth:2,pointRadius:3,pointHoverRadius:5,fill:true,tension:0.3},
-        {label:'Closed',data:VELOCITY_DATA.map(d=>d.c),borderColor:'#4A9C6A',backgroundColor:'rgba(74,156,106,0.08)',borderWidth:2,pointRadius:3,pointHoverRadius:5,fill:true,tension:0.3},
-      ]
-    },
-    options:{
-      ...baseOpts,
-      plugins:{...baseOpts.plugins,tooltip:{...ttCfg,callbacks:{afterBody:ctx=>{
-        const o=VELOCITY_DATA[ctx[0].dataIndex]?.o||0;
-        const c=VELOCITY_DATA[ctx[0].dataIndex]?.c||0;
-        const diff=o-c;
-        return diff>0?`Net: +${diff} (backlog growing)`:`Net: ${diff} (backlog shrinking)`;
-      }}}},
-      scales:{
-        x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10},maxRotation:45,autoSkip:false},border:{display:false}},
-        y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:11}},border:{display:false},beginAtZero:true}
-      }
-    }
-  });
-  makeLegend('velocityLegend',[{label:'Opened',color:'#4A90C4'},{label:'Closed',color:'#4A9C6A'}]);
-
-  if(daysChart) daysChart.destroy();
-  if (DAYS_DATA.length > 0) {
-    daysChart = new Chart(document.getElementById('daysChart'), {
-      type:'bar',
-      data:{
-        labels:DAYS_DATA.map(d=>d.area),
-        datasets:[{data:DAYS_DATA.map(d=>d.days),backgroundColor:DAYS_DATA.map(d=>d.cat==='PI'?'#4A9C6A':d.cat==='WC'?'#C9A84C':'#A52020'),borderRadius:3,borderSkipped:false}]
-      },
-      options:{
-        ...baseOpts,indexAxis:'y',
-        plugins:{...baseOpts.plugins,tooltip:{...ttCfg,callbacks:{label:ctx=>`${ctx.raw} avg days`}}},
-        scales:{
-          x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10}},border:{display:false}},
-          y:{grid:{display:false},ticks:{color:tickColor,font:{size:10}},border:{display:false}}
-        }
-      }
-    });
-  }
-}
-
-// ── Main update ───────────────────────────────────────────────────────────────
-function update() {
-  const statusF = document.getElementById('statusFilter').value;
-  const areaF   = document.getElementById('areaFilter').value;
-  const {total,settlement,avgDur,byStatus,byArea} = getFiltered(statusF,areaF);
-
-  // Metric cards
-  document.getElementById('m-total').textContent = total.toLocaleString();
-  if(statusF==='all'){
-    document.getElementById('m-total-sub').textContent='all time';
-    ['open','closed','pending'].forEach(s=>document.getElementById('card-'+s).classList.remove('hidden'));
-    document.getElementById('metric-row').classList.remove('filtered');
-  } else {
-    document.getElementById('m-total-sub').textContent=statusF+' matters only';
-    ['open','closed','pending'].forEach(s=>{
-      const v=byStatus[s.charAt(0).toUpperCase()+s.slice(1)];
-      document.getElementById('card-'+s).classList.toggle('hidden',v===0);
-    });
-    document.getElementById('metric-row').classList.add('filtered');
-  }
-  document.getElementById('m-open').textContent     = byStatus.Open.toLocaleString();
-  document.getElementById('m-open-sub').textContent = total>0?Math.round(byStatus.Open/total*100)+'% of total':'';
-  document.getElementById('m-closed').textContent   = byStatus.Closed.toLocaleString();
-  document.getElementById('m-closed-sub').textContent=total>0?Math.round(byStatus.Closed/total*100)+'% of total':'';
-  document.getElementById('m-pending').textContent  = byStatus.Pending.toLocaleString();
-  document.getElementById('m-pending-sub').textContent=total>0?Math.round(byStatus.Pending/total*100)+'% of total':'';
-  document.getElementById('m-dur').textContent      = avgDur?avgDur.toLocaleString():'—';
-
-  // Donuts
-
-  const aLabels = AREAS.filter(a=>byArea[a]>0);
-  if(areaChart) areaChart.destroy();
-  areaChart = new Chart(document.getElementById('areaChart'),{
-    type:'doughnut',
-    data:{labels:aLabels,datasets:[{data:aLabels.map(a=>byArea[a]),backgroundColor:aLabels.map(a=>AREA_COLORS[a]),borderWidth:0,hoverOffset:6}]},
-    options:{...baseOpts,cutout:'65%'}
-  });
-  makeLegend('areaLegend',aLabels.map(a=>({label:`${a} — ${byArea[a].toLocaleString()}`,color:AREA_COLORS[a]})));
-
-  const scalesStacked={
-    x:{stacked:true,grid:{display:false},ticks:{color:tickColor,font:{size:11},autoSkip:false,maxRotation:0},border:{display:false}},
-    y:{stacked:true,grid:{color:gridColor},ticks:{color:tickColor,font:{size:11}},border:{display:false}}
-  };
-
-  if(yearChart) yearChart.destroy();
-  yearChart = new Chart(document.getElementById('yearChart'),{
-    type:'bar',data:{labels:YEAR_DATA.map(d=>d.year),datasets:stackedDs(YEAR_DATA,statusF)},
-    options:{...baseOpts,scales:scalesStacked}
-  });
-  const yst=statusF==='all'?STATUSES:[statusF];
-  makeLegend('yearLegend',yst.map(s=>({label:s,color:STATUS_COLORS[s]})));
-
-  if(monthChart) monthChart.destroy();
-  monthChart = new Chart(document.getElementById('monthChart'),{
-    type:'bar',data:{labels:MONTH_DATA.map(d=>d.month),datasets:stackedDs(MONTH_DATA,statusF)},
-    options:{...baseOpts,scales:scalesStacked}
-  });
-  makeLegend('monthLegend',yst.map(s=>({label:s,color:STATUS_COLORS[s]})));
-
-  // Bars
-  renderBars('practiceAreaBars', getPADetail(statusF,areaF), d=>{
-    const a=d.area;
-    if(a.startsWith('Criminal'))return'#A52020';
-    if(a.startsWith('Personal Injury'))return'#4A9C6A';
-    if(a.startsWith("Workers'"))return'#C9A84C';
-    return'#5A5248';
-  }, 155);
-
-  const attyLookup = areaF === 'all'
-  ? (statusF === 'all' ? 'all' : statusF)
-  : (statusF === 'all' ? `all|${areaF}` : `${statusF}|${areaF}`);
-renderBars('attorneyBars', ATTORNEY_DATA[attyLookup] || ATTORNEY_DATA['all'], (_,i) => ATTY_COLORS[i % ATTY_COLORS.length], 145);
-
-  renderBars('attyDaysBars', ATTY_DAYS_DATA,
-  d => d.area === '(unassigned)' ? '#5A5248' : '#4A90C4',
-  155, v => `${v} days`);
-
-  renderBars('languageBars', LANGUAGES, (_,i)=>['#C9A84C','#4A90C4','#4A9C6A','#A52020','#7B68C8'][i%5], 120);
-
-  renderBars('cityBars', CITIES.slice(0,15).map(c=>({area:c.city,count:c.count})), ()=>'#8B1A1A', 120);
-
-}
-
-// ── Map ───────────────────────────────────────────────────────────────────────
-let leafletMap=null, bubbleLayers=[];
-function initMap(){
-  leafletMap=L.map('leaflet-map',{center:[33.92,-84.25],zoom:10,zoomControl:true,attributionControl:true});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter_all/{z}/{x}/{y}{r}.png',{
-    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
-    subdomains:'abcd',maxZoom:16,
-  }).addTo(leafletMap);
-  drawBubbles();
-}
-function drawBubbles(){
-  if(!leafletMap||!CITIES.length) return;
-  bubbleLayers.forEach(l=>leafletMap.removeLayer(l));
-  bubbleLayers=[];
-  const maxCount=Math.max(...CITIES.map(c=>c.count));
-  const maxR=48, minR=7;
-  CITIES.forEach(c=>{
-    const r=minR+(c.count/maxCount)*(maxR-minR);
-    const circle=L.circleMarker([c.lat,c.lng],{radius:r,fillColor:'#8B1A1A',fillOpacity:0.55,color:'#C9A84C',weight:1.5,opacity:0.85});
-    circle.bindPopup(`<div class="popup-city">${c.city}</div><div class="popup-count">${c.count.toLocaleString()} clients</div>`,{closeButton:true,offset:[0,-4]});
-    if(c.count>=30) circle.bindTooltip(c.city,{permanent:true,direction:'center',className:'bubble-label',offset:[0,0]});
-    circle.addTo(leafletMap);
-    bubbleLayers.push(circle);
-  });
-}
-
-// ── Start ─────────────────────────────────────────────────────────────────────
 init();
 </script>
 </body>
