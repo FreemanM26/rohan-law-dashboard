@@ -197,7 +197,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </div>
   <p class="section-eyebrow">People & referrals</p>
   <div class="chart-row r-2">
-    <div class="card"><div class="card-title">Preferred language</div><div class="card-sub">From matters with language data in Clio</div><div id="ov-languageBars"></div></div>
+    <div class="card"><div class="card-title">Preferred language — firm wide</div><div class="card-sub">English · Spanish · Other · Not set (cleanup scoreboard)</div><div id="ov-languageBars"></div></div>
     <div class="card"><div class="card-title">Top zip codes by client count</div><div class="card-sub">Ranked · all matters with zip code data from Clio</div><div id="ov-zipBars"></div></div>
   </div>
   <p class="section-eyebrow">Client geography</p>
@@ -250,6 +250,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <div class="card"><div class="card-title">Court</div><div class="card-sub">Matters by court name</div><div id="cr-courtBars"></div></div>
     <div class="card"><div class="card-title">Judge</div><div class="card-sub">Matters by judge</div><div id="cr-judgeBars"></div></div>
   </div>
+  <p class="section-eyebrow">People</p>
+  <div class="chart-row r-2">
+    <div class="card"><div class="card-title">Preferred language</div><div class="card-sub">Criminal matters · English · Spanish · Other</div><div id="cr-languageBars"></div></div>
+    <div class="card"><div class="card-title">Top zip codes by client count</div><div class="card-sub">Criminal matters with zip code data</div><div id="cr-zipBars"></div></div>
+  </div>
   <p class="section-eyebrow">Client geography</p>
   <div class="chart-row" style="grid-template-columns:1fr;">
     <div class="card">
@@ -288,6 +293,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <div class="chart-row r-2">
     <div class="card"><div class="card-title">Attorney fees by referring attorney</div><div class="card-sub">PI matters with fee data in Clio</div><div id="pi-feesBars"></div></div>
     <div class="card"><div class="card-title">Responsible attorney</div><div class="card-sub">PI matter count by attorney</div><div id="pi-attorneyBars"></div></div>
+  </div>
+  <p class="section-eyebrow">People</p>
+  <div class="chart-row r-2">
+    <div class="card"><div class="card-title">Preferred language</div><div class="card-sub">Personal injury matters · English · Spanish · Other</div><div id="pi-languageBars"></div></div>
+    <div class="card"><div class="card-title">Top zip codes by client count</div><div class="card-sub">PI matters with zip code data</div><div id="pi-zipBars"></div></div>
   </div>
   <p class="section-eyebrow">Client geography</p>
   <div class="chart-row" style="grid-template-columns:1fr;">
@@ -328,6 +338,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <div class="card"><div class="card-title">Attorney fees by sub-area</div><div class="card-sub">WC matters with fee data in Clio</div><div id="wc-feesBars"></div></div>
     <div class="card"><div class="card-title">Responsible attorney</div><div class="card-sub">WC matter count by attorney</div><div id="wc-attorneyBars"></div></div>
   </div>
+  <p class="section-eyebrow">People</p>
+  <div class="chart-row r-2">
+    <div class="card"><div class="card-title">Preferred language</div><div class="card-sub">Workers' comp matters · English · Spanish · Other</div><div id="wc-languageBars"></div></div>
+    <div class="card"><div class="card-title">Top zip codes by client count</div><div class="card-sub">WC matters with zip code data</div><div id="wc-zipBars"></div></div>
+  </div>
   <p class="section-eyebrow">Client geography</p>
   <div class="chart-row" style="grid-template-columns:1fr;">
     <div class="card">
@@ -361,6 +376,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <div class="chart-row r-2">
     <div class="card"><div class="card-title">Responsible attorney</div><div class="card-sub">Other matter count by attorney</div><div id="ot-attorneyBars"></div></div>
     <div class="card"><div class="card-title">Avg days to close by sub-area</div><div class="card-sub">Closed other matters only</div><div id="ot-daysBars"></div></div>
+  </div>
+  <p class="section-eyebrow">People</p>
+  <div class="chart-row r-2">
+    <div class="card"><div class="card-title">Preferred language</div><div class="card-sub">Other matters · English · Spanish · Other</div><div id="ot-languageBars"></div></div>
+    <div class="card"><div class="card-title">Top zip codes by client count</div><div class="card-sub">Other matters with zip code data</div><div id="ot-zipBars"></div></div>
   </div>
   <p class="section-eyebrow">Client geography</p>
   <div class="chart-row" style="grid-template-columns:1fr;">
@@ -826,6 +846,41 @@ function refreshMapForPage(page){
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
+//  LANGUAGE & ZIP BAR HELPERS
+// ══════════════════════════════════════════════════════════════════════════════
+function normalizeLang(raw){
+  if(!raw||!raw.trim())return null;
+  const l=raw.trim().toLowerCase();
+  if(l.startsWith('sp')||l==='es'||l==='español'||l==='espanol')return'Spanish';
+  if(l.startsWith('en'))return'English';
+  return'Other';
+}
+
+function renderLangBars(id,matters,includeNotSet=false){
+  const counts={English:0,Spanish:0,Other:0};
+  let notSet=0;
+  matters.forEach(m=>{
+    const raw=getCF(m,'Preferred Language');
+    const normalized=normalizeLang(raw);
+    if(!normalized){notSet++;return;}
+    counts[normalized]=(counts[normalized]||0)+1;
+  });
+  const LANG_COLORS={English:'#4A90C4',Spanish:'#4A9C6A',Other:'#C9A84C','Not set':'#5A5248'};
+  const data=[
+    {label:'English',count:counts.English},
+    {label:'Spanish',count:counts.Spanish},
+    {label:'Other',count:counts.Other},
+  ].filter(d=>d.count>0);
+  if(includeNotSet&&notSet>0) data.push({label:'Not set',count:notSet});
+  renderBars(id,data,d=>LANG_COLORS[d.label]||'#5A5248',100);
+}
+
+function renderZipBars(id,matters,lw=175){
+  const zipData=getZipData(matters);
+  renderBars(id,zipData.slice(0,15).map(z=>({label:z.zip+(z.city?` · ${z.city}`:''),count:z.count})),()=>'#8B1A1A',lw);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
 //  PAGE RENDERERS
 // ══════════════════════════════════════════════════════════════════════════════
 function renderOverview(){
@@ -857,11 +912,8 @@ function renderOverview(){
   const daysData=Object.entries(subDurMap).filter(([,v])=>v.count>=3).map(([area,v])=>{const cat=area.startsWith('Personal Injury')?'PI':area.startsWith("Workers'")?'WC':'CR';return{area,days:Math.round(v.sum/v.count),cat};}).sort((a,b)=>b.days-a.days).slice(0,14);
   mkChart('ov-daysChart',{type:'bar',data:{labels:daysData.map(d=>d.area),datasets:[{data:daysData.map(d=>d.days),backgroundColor:daysData.map(d=>d.cat==='PI'?'#4A9C6A':d.cat==='WC'?'#C9A84C':'#A52020'),borderRadius:3,borderSkipped:false}]},options:{...baseOpts,indexAxis:'y',plugins:{...baseOpts.plugins,tooltip:{...ttCfg,callbacks:{label:ctx=>`${ctx.raw} avg days`}}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10}},border:{display:false}},y:{grid:{display:false},ticks:{color:tickColor,font:{size:10}},border:{display:false}}}}});
   buildAttyDaysBars('ov-attyDaysBars',m,155);
-  const langMap={};m.forEach(mat=>{const lang=getCF(mat,'Preferred Language');if(lang&&lang.trim()){const l=lang.trim().toLowerCase();const n=l.startsWith('sp')||l==='es'?'Spanish':l.startsWith('en')?'English':lang.trim();langMap[n]=(langMap[n]||0)+1;}});
-  renderBars('ov-languageBars',Object.entries(langMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,10),(_,i)=>['#C9A84C','#4A90C4','#4A9C6A','#A52020','#7B68C8'][i%5],120);
-  // Zip bars
-  const zipData=getZipData(m);
-  renderBars('ov-zipBars',zipData.slice(0,15).map(z=>({label:z.zip+(z.city?` · ${z.city}`:''),count:z.count})),()=>'#8B1A1A',175);
+  renderLangBars('ov-languageBars',m,true);
+  renderZipBars('ov-zipBars',m,175);
   refreshMapForPage('overview');
 }
 
@@ -879,6 +931,8 @@ function renderCriminal(){
   renderBars('cr-courtBars',Object.entries(courtMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,12),()=>'#A52020',155);
   const judgeMap={};matters.forEach(m=>{const j=getCF(m,'Judge');if(j&&j.trim())judgeMap[j.trim()]=(judgeMap[j.trim()]||0)+1;});
   renderBars('cr-judgeBars',Object.entries(judgeMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,12),()=>'#C9A84C',155);
+  renderLangBars('cr-languageBars',matters,false);
+  renderZipBars('cr-zipBars',matters,175);
   refreshMapForPage('criminal');
 }
 
@@ -894,6 +948,8 @@ function renderPI(){
   buildSettlementBars('pi-settlementBars',matters,()=>'#4A9C6A',160);
   buildFeesBars('pi-feesBars',matters,()=>'#2E7D52',160);
   buildAttyBars('pi-attorneyBars',matters,145);
+  renderLangBars('pi-languageBars',matters,false);
+  renderZipBars('pi-zipBars',matters,175);
   refreshMapForPage('pi');
 }
 
@@ -909,6 +965,8 @@ function renderWC(){
   buildSettlementBars('wc-settlementBars',matters,d=>d.label?.startsWith('Personal Injury')?'#4A9C6A':'#C9A84C',155);
   buildFeesBars('wc-feesBars',matters,()=>'#8B6914',155);
   buildAttyBars('wc-attorneyBars',matters,145);
+  renderLangBars('wc-languageBars',matters,false);
+  renderZipBars('wc-zipBars',matters,175);
   refreshMapForPage('wc');
 }
 
@@ -921,6 +979,8 @@ function renderOther(){
   renderBars('ot-subareaBar',Object.entries(paMap).map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count).slice(0,12),()=>'#5A5248',155);
   buildAttyBars('ot-attorneyBars',matters,145);
   buildSubareaDaysBars('ot-daysBars',matters,'#5A5248',155);
+  renderLangBars('ot-languageBars',matters,false);
+  renderZipBars('ot-zipBars',matters,175);
   refreshMapForPage('other');
 }
 
@@ -1024,8 +1084,7 @@ async function init(){
         refreshMapForPage(CURRENT_PAGE);
         // Update zip bar chart if on overview
         if(CURRENT_PAGE==='overview'){
-          const zipData=getZipData(ALL_MATTERS);
-          renderBars('ov-zipBars',zipData.slice(0,15).map(z=>({label:z.zip+(z.city?` · ${z.city}`:''),count:z.count})),()=>'#8B1A1A',175);
+          renderZipBars('ov-zipBars',ALL_MATTERS,175);
         }
       } catch(ce){
         console.warn('Contact zip fetch failed:',ce.message);
