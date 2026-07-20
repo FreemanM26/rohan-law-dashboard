@@ -1061,8 +1061,6 @@ async function init(){
       setLoadMessage('Connecting to Clio API…');
       const matters=await fetchAllMatters();
       // Filter custom fields
-      const WANTED_CF=new Set(['Preferred Language','Referral Source','Settlement Amount','Attorney Fees','Total Awards','Court','Judge']);
-      matters.forEach(m=>{m.custom_field_values=(m.custom_field_values||[]).filter(c=>WANTED_CF.has(c.field_name));});
       ALL_MATTERS=matters;
       DATA_MODE='live';DATA_AS_OF=new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
 
@@ -1111,8 +1109,6 @@ async function refreshData(){
   btn.classList.add('spinning');btn.disabled=true;
   try{
     const matters=await fetchAllMatters();
-    const WANTED_CF=new Set(['Preferred Language','Referral Source','Settlement Amount','Attorney Fees','Total Awards','Court','Judge']);
-    matters.forEach(m=>{m.custom_field_values=(m.custom_field_values||[]).filter(c=>WANTED_CF.has(c.field_name));});
     ALL_MATTERS=matters;
     DATA_MODE='live';DATA_AS_OF=new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
     showBanner('live',DATA_AS_OF);
