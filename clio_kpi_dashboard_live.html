@@ -115,6 +115,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .bubble-label{background:transparent!important;border:none!important;box-shadow:none!important;color:rgba(240,235,224,0.9)!important;font-family:var(--font)!important;font-size:10px!important;font-weight:600!important;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 6px rgba(0,0,0,0.9)!important;pointer-events:none!important;white-space:nowrap!important;}
 .bubble-label::before{display:none!important;}
 .map-status{font-size:10px;color:var(--text-3);margin-top:6px;text-align:right;}
+.date-filter-bar{display:flex;align-items:center;gap:8px;padding:10px 32px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:104px;z-index:180;flex-wrap:wrap;}
+.date-filter-bar .df-label{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-3);margin-right:2px;white-space:nowrap;}
+.date-filter-bar .df-presets{display:flex;gap:4px;flex-wrap:wrap;}
+.df-preset{padding:5px 12px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--text-2);font-size:11px;font-weight:500;cursor:pointer;transition:all 0.15s;font-family:var(--font);white-space:nowrap;}
+.df-preset:hover{border-color:var(--gold);color:var(--text);}
+.df-preset.active{background:var(--crimson);color:var(--gold-lite);border-color:rgba(201,168,76,0.4);}
+.df-divider{width:1px;height:22px;background:var(--border);margin:0 4px;flex-shrink:0;}
+.df-custom{display:flex;align-items:center;gap:6px;}
+.df-custom input[type="date"]{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:11px;font-family:var(--font);padding:4px 8px;width:130px;cursor:pointer;outline:none;transition:border-color 0.15s;}
+.df-custom input[type="date"]:focus{border-color:var(--gold);}
+.df-custom input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);cursor:pointer;}
+.df-custom .df-to{font-size:10px;color:var(--text-3);}
+.df-field-toggle{display:flex;align-items:center;gap:0;margin-left:auto;border:1px solid var(--border);border-radius:5px;overflow:hidden;flex-shrink:0;}
+.df-field-btn{padding:5px 10px;font-size:10px;font-weight:500;color:var(--text-3);cursor:pointer;transition:all 0.15s;font-family:var(--font);background:transparent;border:none;white-space:nowrap;}
+.df-field-btn:first-child{border-right:1px solid var(--border);}
+.df-field-btn:hover{color:var(--text);}
+.df-field-btn.active{background:var(--surface2);color:var(--gold);}
+.df-active-label{font-size:10px;color:var(--gold);font-weight:500;display:none;white-space:nowrap;}
+.df-active-label.show{display:inline;}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
@@ -161,6 +180,32 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <button class="page-tab" onclick="switchPage('wc')" id="tab-wc"><span class="tab-dot" style="background:#C9A84C"></span>Workers' Comp</button>
   <button class="page-tab" onclick="switchPage('other')" id="tab-other"><span class="tab-dot" style="background:#5A5248"></span>Other</button>
 </nav>
+
+<!-- DATE FILTER -->
+<div class="date-filter-bar" id="dateFilterBar">
+  <span class="df-label">Date range</span>
+  <div class="df-presets">
+    <button class="df-preset active" onclick="setDatePreset('all',this)">All time</button>
+    <button class="df-preset" onclick="setDatePreset('7d',this)">Last 7 days</button>
+    <button class="df-preset" onclick="setDatePreset('30d',this)">Last 30 days</button>
+    <button class="df-preset" onclick="setDatePreset('thisMonth',this)">This month</button>
+    <button class="df-preset" onclick="setDatePreset('lastMonth',this)">Last month</button>
+    <button class="df-preset" onclick="setDatePreset('thisQ',this)">This quarter</button>
+    <button class="df-preset" onclick="setDatePreset('ytd',this)">Year to date</button>
+    <button class="df-preset" onclick="setDatePreset('lastYear',this)">Last year</button>
+  </div>
+  <div class="df-divider"></div>
+  <div class="df-custom">
+    <input type="date" id="dfStart" onchange="setCustomDateRange()">
+    <span class="df-to">to</span>
+    <input type="date" id="dfEnd" onchange="setCustomDateRange()">
+  </div>
+  <span class="df-active-label" id="dfActiveLabel"></span>
+  <div class="df-field-toggle">
+    <button class="df-field-btn active" id="dfFieldOpen" onclick="setDateField('open_date')">Opened</button>
+    <button class="df-field-btn" id="dfFieldClose" onclick="setDateField('close_date')">Closed</button>
+  </div>
+</div>
 
 <!-- OVERVIEW -->
 <div class="page active" id="page-overview">
@@ -398,8 +443,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 //  CONFIG — PASTE YOUR CREDENTIALS HERE
 // ██████████████████████████████████████████████████████████████████████████████
 const CONFIG = {
-  access_token:   '33902-KN5db4ssDEv8QV8vRbxgZRFxpEPa00MW8x',
-  refresh_token:  'iQkFqVgXJDobrJArUtRRII0y6NSbSSTxQhZhts1s',
+  access_token:   '33902-9sqk0syoXIUbMIhoSwUFzguCjVao2Za1ZI',
+  refresh_token:  'GmsrCr6TlUiYFxnXebNkLH4f0IFkgQ0ZDyly92Ab',
   client_id:      'yuBr9ZA2HVtUKNB7QBX4hFX69fxt8CWvyQBuRR2B',
   client_secret:  '9w5ylIedznBnktTmYMb6q5qvoX9ByDNikhfPBMRi',
   base_url:       'https://app.clio.com',
@@ -505,6 +550,10 @@ let DATA_AS_OF = FALLBACK_AS_OF;
 let CURRENT_PAGE = 'overview';
 let CURRENT_CR_SUBAREA = 'all';
 let CONTACTS_LOADED = false;
+let DATE_FILTER_START = null; // Date object or null for 'all'
+let DATE_FILTER_END = null;
+let DATE_FILTER_FIELD = 'open_date'; // 'open_date' or 'close_date'
+let DATE_FILTER_PRESET = 'all';
 
 const STATUSES = ['Open','Closed','Pending'];
 const AREAS = ['Criminal','Personal Injury',"Workers' Comp",'Other'];
@@ -693,8 +742,107 @@ function renderBars(id,data,colorFn,lw=160,valFmt=null){
   }).join('');
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  DATE FILTER
+// ══════════════════════════════════════════════════════════════════════════════
+function applyDateFilter(matters){
+  if(!DATE_FILTER_START && !DATE_FILTER_END) return matters;
+  return matters.filter(m=>{
+    const raw = m[DATE_FILTER_FIELD];
+    if(!raw) return false; // no date = exclude when filtering
+    const d = new Date(raw);
+    if(DATE_FILTER_START && d < DATE_FILTER_START) return false;
+    if(DATE_FILTER_END && d > DATE_FILTER_END) return false;
+    return true;
+  });
+}
+
+function getDateFilteredMatters(){
+  return applyDateFilter(ALL_MATTERS);
+}
+
+function setDatePreset(preset, btn){
+  DATE_FILTER_PRESET = preset;
+  document.querySelectorAll('.df-preset').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+  const startOf = (y,m,d) => new Date(y, m, d, 0, 0, 0);
+  switch(preset){
+    case 'all':
+      DATE_FILTER_START = null; DATE_FILTER_END = null; break;
+    case '7d':
+      DATE_FILTER_START = new Date(now); DATE_FILTER_START.setDate(DATE_FILTER_START.getDate()-7);
+      DATE_FILTER_START.setHours(0,0,0,0); DATE_FILTER_END = today; break;
+    case '30d':
+      DATE_FILTER_START = new Date(now); DATE_FILTER_START.setDate(DATE_FILTER_START.getDate()-30);
+      DATE_FILTER_START.setHours(0,0,0,0); DATE_FILTER_END = today; break;
+    case 'thisMonth':
+      DATE_FILTER_START = startOf(now.getFullYear(), now.getMonth(), 1); DATE_FILTER_END = today; break;
+    case 'lastMonth': {
+      const lm = new Date(now.getFullYear(), now.getMonth()-1, 1);
+      DATE_FILTER_START = startOf(lm.getFullYear(), lm.getMonth(), 1);
+      DATE_FILTER_END = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59); break;
+    }
+    case 'thisQ': {
+      const qStart = Math.floor(now.getMonth()/3)*3;
+      DATE_FILTER_START = startOf(now.getFullYear(), qStart, 1); DATE_FILTER_END = today; break;
+    }
+    case 'ytd':
+      DATE_FILTER_START = startOf(now.getFullYear(), 0, 1); DATE_FILTER_END = today; break;
+    case 'lastYear':
+      DATE_FILTER_START = startOf(now.getFullYear()-1, 0, 1);
+      DATE_FILTER_END = new Date(now.getFullYear()-1, 11, 31, 23, 59, 59); break;
+    default:
+      DATE_FILTER_START = null; DATE_FILTER_END = null;
+  }
+  // Sync custom date inputs
+  const dfS = document.getElementById('dfStart');
+  const dfE = document.getElementById('dfEnd');
+  if(DATE_FILTER_START){dfS.value=DATE_FILTER_START.toISOString().substring(0,10);}else{dfS.value='';}
+  if(DATE_FILTER_END){dfE.value=DATE_FILTER_END.toISOString().substring(0,10);}else{dfE.value='';}
+  updateDateLabel();
+  renderPage(CURRENT_PAGE);
+}
+
+function setCustomDateRange(){
+  const dfS = document.getElementById('dfStart').value;
+  const dfE = document.getElementById('dfEnd').value;
+  // Clear preset selection
+  document.querySelectorAll('.df-preset').forEach(b=>b.classList.remove('active'));
+  DATE_FILTER_PRESET = 'custom';
+  if(dfS){ DATE_FILTER_START = new Date(dfS+'T00:00:00'); } else { DATE_FILTER_START = null; }
+  if(dfE){ DATE_FILTER_END = new Date(dfE+'T23:59:59'); } else { DATE_FILTER_END = null; }
+  updateDateLabel();
+  renderPage(CURRENT_PAGE);
+}
+
+function setDateField(field){
+  DATE_FILTER_FIELD = field;
+  document.getElementById('dfFieldOpen').classList.toggle('active', field==='open_date');
+  document.getElementById('dfFieldClose').classList.toggle('active', field==='close_date');
+  updateDateLabel();
+  if(DATE_FILTER_PRESET !== 'all') renderPage(CURRENT_PAGE);
+}
+
+function updateDateLabel(){
+  const el = document.getElementById('dfActiveLabel');
+  if(DATE_FILTER_PRESET === 'all' || (!DATE_FILTER_START && !DATE_FILTER_END)){
+    el.classList.remove('show'); return;
+  }
+  const fieldLabel = DATE_FILTER_FIELD === 'open_date' ? 'opened' : 'closed';
+  const fmt = d => d.toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
+  let range = '';
+  if(DATE_FILTER_START && DATE_FILTER_END) range = `${fmt(DATE_FILTER_START)} – ${fmt(DATE_FILTER_END)}`;
+  else if(DATE_FILTER_START) range = `from ${fmt(DATE_FILTER_START)}`;
+  else range = `through ${fmt(DATE_FILTER_END)}`;
+  const filtered = getDateFilteredMatters();
+  el.textContent = `Showing ${filtered.length.toLocaleString()} matters ${fieldLabel} ${range}`;
+  el.classList.add('show');
+}
+
 function filterMatters(area,subarea=null){
-  return ALL_MATTERS.filter(m=>{
+  return applyDateFilter(ALL_MATTERS).filter(m=>{
     const paName=m.practice_area?.name||null;
     const cat=categorizePracticeArea(paName);
     if(cat!==area)return false;
@@ -836,7 +984,7 @@ function refreshMapForPage(page){
   if(!mapId)return;
   if(!MAPS[mapId])initMap(mapId);
   let matters;
-  if(page==='overview') matters=ALL_MATTERS;
+  if(page==='overview') matters=getDateFilteredMatters();
   else if(page==='criminal') matters=filterMatters('Criminal',CURRENT_CR_SUBAREA==='all'?null:CURRENT_CR_SUBAREA);
   else if(page==='pi') matters=filterMatters('Personal Injury');
   else if(page==='wc') matters=filterMatters("Workers' Comp");
@@ -884,7 +1032,7 @@ function renderZipBars(id,matters,lw=175){
 //  PAGE RENDERERS
 // ══════════════════════════════════════════════════════════════════════════════
 function renderOverview(){
-  const m=ALL_MATTERS;
+  const m=getDateFilteredMatters();
   let open=0,closed=0,pending=0,durSum=0,durCount=0;
   const byArea={};AREAS.forEach(a=>byArea[a]=0);
   m.forEach(mat=>{
@@ -1001,6 +1149,7 @@ function switchPage(page){
 
 function renderPage(page){
   if(!ALL_MATTERS.length)return;
+  updateDateLabel();
   if(page==='overview')renderOverview();
   else if(page==='criminal')renderCriminal();
   else if(page==='pi')renderPI();
@@ -1082,7 +1231,7 @@ async function init(){
         refreshMapForPage(CURRENT_PAGE);
         // Update zip bar chart if on overview
         if(CURRENT_PAGE==='overview'){
-          renderZipBars('ov-zipBars',ALL_MATTERS,175);
+          renderZipBars('ov-zipBars',getDateFilteredMatters(),175);
         }
       } catch(ce){
         console.warn('Contact zip fetch failed:',ce.message);
