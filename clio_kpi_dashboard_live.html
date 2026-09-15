@@ -484,43 +484,22 @@ const MAPS = {};
 // ══════════════════════════════════════════════════════════════════════════════
 //  SUPABASE API
 // ══════════════════════════════════════════════════════════════════════════════
-async function supabaseGet(table, select = '*', options = '') {
-  const url = `${CONFIG.supabase_url}/rest/v1/${table}?select=${encodeURIComponent(select)}${options}`;
-  const res = await fetch(url, {
+async function fetchDashboardData() {
+  const res = await fetch(`${CONFIG.supabase_url}/rest/v1/rpc/get_dashboard_data`, {
+    method: 'POST',
     headers: {
       'apikey': CONFIG.supabase_key,
       'Authorization': `Bearer ${CONFIG.supabase_key}`,
-      'Prefer': 'count=exact',
+      'Content-Type': 'application/json',
     },
+    body: '{}',
   });
   if (!res.ok) throw new Error(`Supabase error ${res.status}: ${await res.text()}`);
-  const total = parseInt(res.headers.get('content-range')?.split('/')?.[1] || '0');
-  const data = await res.json();
-  return { data, total };
+  return res.json();
 }
 
-async function fetchAllMatters() {
-  const select = 'clio_id,status,open_date,close_date,practice_area_name,practice_area_id,responsible_attorney,responsible_attorney_id,originating_attorney,originating_attorney_id,client_id,client_name,preferred_language,referral_source,settlement_amount,attorney_fees,total_awards,court,judge';
-  const batchSize = 1000;
-
-  // First request gets count so we know how many parallel requests to fire
-  const first = await supabaseGet('matters', select, `&order=clio_id&limit=${batchSize}&offset=0`);
-  const all = [...first.data];
-
-  if (first.total > batchSize) {
-    // Fire remaining batches in parallel
-    const remaining = [];
-    for (let offset = batchSize; offset < first.total; offset += batchSize) {
-      remaining.push(
-        supabaseGet('matters', select, `&order=clio_id&limit=${batchSize}&offset=${offset}`)
-      );
-    }
-    const results = await Promise.all(remaining);
-    results.forEach(r => all.push(...r.data));
-  }
-
-  // Transform Supabase flat rows into the shape the rendering code expects
-  return all.map(m => ({
+function transformMatters(rows) {
+  return (rows || []).map(m => ({
     ...m,
     practice_area: { name: m.practice_area_name, id: m.practice_area_id },
     responsible_attorney: { name: m.responsible_attorney, id: m.responsible_attorney_id },
@@ -538,24 +517,9 @@ async function fetchAllMatters() {
   }));
 }
 
-async function fetchAllClients() {
-  const batchSize = 1000;
-  const first = await supabaseGet('clients', 'clio_id,zip_code,city', `&zip_code=not.is.null&order=clio_id&limit=${batchSize}&offset=0`);
-  const all = [...first.data];
-
-  if (first.total > batchSize) {
-    const remaining = [];
-    for (let offset = batchSize; offset < first.total; offset += batchSize) {
-      remaining.push(
-        supabaseGet('clients', 'clio_id,zip_code,city', `&zip_code=not.is.null&order=clio_id&limit=${batchSize}&offset=${offset}`)
-      );
-    }
-    const results = await Promise.all(remaining);
-    results.forEach(r => all.push(...r.data));
-  }
-
+function buildClientZipMap(rows) {
   const zipMap = {};
-  all.forEach(c => {
+  (rows || []).forEach(c => {
     zipMap[c.clio_id] = { zip: c.zip_code, city: c.city || '' };
   });
   return zipMap;
@@ -996,16 +960,13 @@ function showBanner(mode,asOf){
 async function init(){
   try {
     setLoadMessage('Loading data…');
-    document.getElementById('loadBar').style.width='30%';
+    document.getElementById('loadBar').style.width='50%';
 
-    // Fetch matters and client zip codes in parallel — both are fast from Supabase
-    const [matters, zipMap] = await Promise.all([
-      fetchAllMatters(),
-      fetchAllClients(),
-    ]);
+    // Single database call returns all matters + client zip codes at once
+    const result = await fetchDashboardData();
 
-    ALL_MATTERS = matters;
-    CLIENT_ZIP_MAP = zipMap;
+    ALL_MATTERS = transformMatters(result.matters);
+    CLIENT_ZIP_MAP = buildClientZipMap(result.clients);
     CONTACTS_LOADED = true;
     document.getElementById('loadBar').style.width='90%';
 
@@ -1033,10 +994,9 @@ async function refreshData(){
   const btn=document.getElementById('refreshBtn');
   btn.classList.add('spinning');btn.disabled=true;
   try{
-    const matters = await fetchAllMatters();
-    ALL_MATTERS = matters;
-    const zipMap = await fetchAllClients();
-    CLIENT_ZIP_MAP = zipMap;
+    const result = await fetchDashboardData();
+    ALL_MATTERS = transformMatters(result.matters);
+    CLIENT_ZIP_MAP = buildClientZipMap(result.clients);
     CONTACTS_LOADED = true;
     DATA_MODE='live';DATA_AS_OF=new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
     showBanner('live',DATA_AS_OF);
