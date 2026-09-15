@@ -490,28 +490,42 @@ async function supabaseGet(table, select = '*', options = '') {
     headers: {
       'apikey': CONFIG.supabase_key,
       'Authorization': `Bearer ${CONFIG.supabase_key}`,
-      'Range': '0-9999',  // Allow up to 10,000 rows per request
+      'Prefer': 'count=exact',
     },
   });
   if (!res.ok) throw new Error(`Supabase error ${res.status}: ${await res.text()}`);
-  return res.json();
+  const total = parseInt(res.headers.get('content-range')?.split('/')?.[1] || '0');
+  const data = await res.json();
+  return { data, total };
 }
 
 async function fetchAllMatters() {
-  // Supabase with Range header returns up to 10,000 rows — we have ~4,000
-  // Select only the fields the dashboard actually uses
   const select = 'clio_id,status,open_date,close_date,practice_area_name,practice_area_id,responsible_attorney,responsible_attorney_id,originating_attorney,originating_attorney_id,client_id,client_name,preferred_language,referral_source,settlement_amount,attorney_fees,total_awards,court,judge';
-  const data = await supabaseGet('matters', select, '&order=clio_id');
+  const batchSize = 1000;
+
+  // First request gets count so we know how many parallel requests to fire
+  const first = await supabaseGet('matters', select, `&order=clio_id&limit=${batchSize}&offset=0`);
+  const all = [...first.data];
+
+  if (first.total > batchSize) {
+    // Fire remaining batches in parallel
+    const remaining = [];
+    for (let offset = batchSize; offset < first.total; offset += batchSize) {
+      remaining.push(
+        supabaseGet('matters', select, `&order=clio_id&limit=${batchSize}&offset=${offset}`)
+      );
+    }
+    const results = await Promise.all(remaining);
+    results.forEach(r => all.push(...r.data));
+  }
 
   // Transform Supabase flat rows into the shape the rendering code expects
-  return data.map(m => ({
+  return all.map(m => ({
     ...m,
-    // Re-create nested objects so existing rendering code works unchanged
     practice_area: { name: m.practice_area_name, id: m.practice_area_id },
     responsible_attorney: { name: m.responsible_attorney, id: m.responsible_attorney_id },
     originating_attorney: { name: m.originating_attorney, id: m.originating_attorney_id },
     client: { id: m.client_id, name: m.client_name },
-    // Re-create custom_field_values array so getCF() works unchanged
     custom_field_values: [
       { field_name: 'Preferred Language', value: m.preferred_language },
       { field_name: 'Referral Source', value: m.referral_source },
@@ -525,10 +539,23 @@ async function fetchAllMatters() {
 }
 
 async function fetchAllClients() {
-  // Only fetch clients that have a zip code — cuts 19k rows down to just the ones we need
-  const data = await supabaseGet('clients', 'clio_id,zip_code,city', '&zip_code=not.is.null&order=clio_id');
+  const batchSize = 1000;
+  const first = await supabaseGet('clients', 'clio_id,zip_code,city', `&zip_code=not.is.null&order=clio_id&limit=${batchSize}&offset=0`);
+  const all = [...first.data];
+
+  if (first.total > batchSize) {
+    const remaining = [];
+    for (let offset = batchSize; offset < first.total; offset += batchSize) {
+      remaining.push(
+        supabaseGet('clients', 'clio_id,zip_code,city', `&zip_code=not.is.null&order=clio_id&limit=${batchSize}&offset=${offset}`)
+      );
+    }
+    const results = await Promise.all(remaining);
+    results.forEach(r => all.push(...r.data));
+  }
+
   const zipMap = {};
-  data.forEach(c => {
+  all.forEach(c => {
     zipMap[c.clio_id] = { zip: c.zip_code, city: c.city || '' };
   });
   return zipMap;
