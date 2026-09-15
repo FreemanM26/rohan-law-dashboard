@@ -115,34 +115,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .bubble-label{background:transparent!important;border:none!important;box-shadow:none!important;color:rgba(240,235,224,0.9)!important;font-family:var(--font)!important;font-size:10px!important;font-weight:600!important;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 6px rgba(0,0,0,0.9)!important;pointer-events:none!important;white-space:nowrap!important;}
 .bubble-label::before{display:none!important;}
 .map-status{font-size:10px;color:var(--text-3);margin-top:6px;text-align:right;}
-.date-filter-bar{display:flex;align-items:center;gap:8px;padding:10px 32px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:104px;z-index:180;flex-wrap:wrap;}
-.date-filter-bar .df-label{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-3);margin-right:2px;white-space:nowrap;}
-.date-filter-bar .df-presets{display:flex;gap:4px;flex-wrap:wrap;}
-.df-mode-toggle{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:5px;overflow:hidden;flex-shrink:0;margin-right:4px;}
-.df-mode-btn{padding:5px 11px;font-size:10px;font-weight:600;letter-spacing:0.05em;color:var(--text-3);cursor:pointer;transition:all 0.15s;font-family:var(--font);background:transparent;border:none;white-space:nowrap;text-transform:uppercase;}
-.df-mode-btn:first-child{border-right:1px solid var(--border);}
-.df-mode-btn:hover{color:var(--text);}
-.df-mode-btn.active{background:var(--crimson);color:var(--gold-lite);}
-.df-preset{padding:5px 12px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--text-2);font-size:11px;font-weight:500;cursor:pointer;transition:all 0.15s;font-family:var(--font);white-space:nowrap;}
-.df-preset:hover{border-color:var(--gold);color:var(--text);}
-.df-preset.active{background:var(--crimson);color:var(--gold-lite);border-color:rgba(201,168,76,0.4);}
-.df-divider{width:1px;height:22px;background:var(--border);margin:0 4px;flex-shrink:0;}
-.df-custom{display:flex;align-items:center;gap:6px;}
-.df-custom input[type="date"]{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:11px;font-family:var(--font);padding:4px 8px;width:130px;cursor:pointer;outline:none;transition:border-color 0.15s;}
-.df-custom input[type="date"]:focus{border-color:var(--gold);}
-.df-custom input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);cursor:pointer;}
-.df-custom .df-to{font-size:10px;color:var(--text-3);}
-.df-field-toggle{display:flex;align-items:center;gap:0;margin-left:auto;border:1px solid var(--border);border-radius:5px;overflow:hidden;flex-shrink:0;}
-.df-field-btn{padding:5px 10px;font-size:10px;font-weight:500;color:var(--text-3);cursor:pointer;transition:all 0.15s;font-family:var(--font);background:transparent;border:none;white-space:nowrap;}
-.df-field-btn:first-child{border-right:1px solid var(--border);}
-.df-field-btn:hover{color:var(--text);}
-.df-field-btn.active{background:var(--surface2);color:var(--gold);}
-.df-active-label{font-size:10px;color:var(--gold);font-weight:500;display:none;white-space:nowrap;}
-.df-active-label.show{display:inline;}
-.df-snapshot-badge{font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:rgba(74,144,196,0.15);color:#4A90C4;border:1px solid rgba(74,144,196,0.3);white-space:nowrap;display:none;}
-.df-snapshot-badge.show{display:inline;}
-#dfRangeControls,#dfSnapshotControls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-#dfSnapshotControls{display:none;}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
@@ -153,9 +125,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 <div id="loadingScreen">
   <div class="loading-logo">RL</div>
   <div class="loading-firm">Rohan Law</div>
-  <div class="loading-sub">KPI Dashboard — loading live data</div>
+  <div class="loading-sub">KPI Dashboard — loading data</div>
   <div class="loading-bar-wrap"><div class="loading-bar-fill" id="loadBar"></div></div>
-  <div class="loading-status" id="loadStatus">Connecting to Clio…</div>
+  <div class="loading-status" id="loadStatus">Connecting…</div>
   <div class="loading-count" id="loadCount"></div>
   <div class="loading-mode-badge live" id="loadBadge">Live data</div>
 </div>
@@ -189,59 +161,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <button class="page-tab" onclick="switchPage('wc')" id="tab-wc"><span class="tab-dot" style="background:#C9A84C"></span>Workers' Comp</button>
   <button class="page-tab" onclick="switchPage('other')" id="tab-other"><span class="tab-dot" style="background:#5A5248"></span>Other</button>
 </nav>
-
-<!-- DATE FILTER -->
-<div class="date-filter-bar" id="dateFilterBar">
-  <div class="df-mode-toggle">
-    <button class="df-mode-btn active" id="dfModeRange" onclick="setFilterMode('range')">Range</button>
-    <button class="df-mode-btn" id="dfModeSnap" onclick="setFilterMode('snapshot')">Snapshot</button>
-  </div>
-
-  <!-- RANGE MODE controls -->
-  <div id="dfRangeControls">
-    <div class="df-presets">
-      <button class="df-preset active" onclick="setDatePreset('all',this)">All time</button>
-      <button class="df-preset" onclick="setDatePreset('7d',this)">Last 7 days</button>
-      <button class="df-preset" onclick="setDatePreset('30d',this)">Last 30 days</button>
-      <button class="df-preset" onclick="setDatePreset('thisMonth',this)">This month</button>
-      <button class="df-preset" onclick="setDatePreset('lastMonth',this)">Last month</button>
-      <button class="df-preset" onclick="setDatePreset('thisQ',this)">This quarter</button>
-      <button class="df-preset" onclick="setDatePreset('ytd',this)">Year to date</button>
-      <button class="df-preset" onclick="setDatePreset('lastYear',this)">Last year</button>
-    </div>
-    <div class="df-divider"></div>
-    <div class="df-custom">
-      <input type="date" id="dfStart" onchange="setCustomDateRange()">
-      <span class="df-to">to</span>
-      <input type="date" id="dfEnd" onchange="setCustomDateRange()">
-    </div>
-    <div class="df-field-toggle">
-      <button class="df-field-btn active" id="dfFieldOpen" onclick="setDateField('open_date')">Opened</button>
-      <button class="df-field-btn" id="dfFieldClose" onclick="setDateField('close_date')">Closed</button>
-    </div>
-  </div>
-
-  <!-- SNAPSHOT MODE controls -->
-  <div id="dfSnapshotControls">
-    <div class="df-presets" id="dfSnapPresets">
-      <button class="df-preset" onclick="setSnapshotPreset('today',this)">Today</button>
-      <button class="df-preset" onclick="setSnapshotPreset('lastWeek',this)">End of last week</button>
-      <button class="df-preset" onclick="setSnapshotPreset('lastMonth',this)">End of last month</button>
-      <button class="df-preset" onclick="setSnapshotPreset('lastQ',this)">End of last quarter</button>
-      <button class="df-preset" onclick="setSnapshotPreset('endLastYear',this)">End of last year</button>
-      <button class="df-preset" onclick="setSnapshotPreset('6moAgo',this)">6 months ago</button>
-      <button class="df-preset" onclick="setSnapshotPreset('1yrAgo',this)">1 year ago</button>
-    </div>
-    <div class="df-divider"></div>
-    <div class="df-custom">
-      <span class="df-to">as of</span>
-      <input type="date" id="dfSnapDate" onchange="setCustomSnapshot()">
-    </div>
-  </div>
-
-  <span class="df-active-label" id="dfActiveLabel"></span>
-  <span class="df-snapshot-badge" id="dfSnapBadge">Snapshot — reconstructed statuses</span>
-</div>
 
 <!-- OVERVIEW -->
 <div class="page active" id="page-overview">
@@ -279,7 +198,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <p class="section-eyebrow">People & referrals</p>
   <div class="chart-row r-2">
     <div class="card"><div class="card-title">Preferred language — firm wide</div><div class="card-sub">English · Spanish · Other · Not set (cleanup scoreboard)</div><div id="ov-languageBars"></div></div>
-    <div class="card"><div class="card-title">Top zip codes by client count</div><div class="card-sub">Ranked · all matters with zip code data from Clio</div><div id="ov-zipBars"></div></div>
+    <div class="card"><div class="card-title">Top zip codes by client count</div><div class="card-sub">Ranked · all matters with zip code data</div><div id="ov-zipBars"></div></div>
   </div>
   <p class="section-eyebrow">Client geography</p>
   <div class="chart-row" style="grid-template-columns:1fr;">
@@ -369,10 +288,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <p class="section-eyebrow">Performance & financials</p>
   <div class="chart-row r-2">
     <div class="card"><div class="card-title">Avg days to close by referring attorney</div><div class="card-sub">Closed PI matters only · 3+ matters</div><div id="pi-daysBars"></div></div>
-    <div class="card"><div class="card-title">Settlement amounts by referring attorney</div><div class="card-sub">PI matters with settlement data in Clio</div><div id="pi-settlementBars"></div></div>
+    <div class="card"><div class="card-title">Settlement amounts by referring attorney</div><div class="card-sub">PI matters with settlement data</div><div id="pi-settlementBars"></div></div>
   </div>
   <div class="chart-row r-2">
-    <div class="card"><div class="card-title">Attorney fees by referring attorney</div><div class="card-sub">PI matters with fee data in Clio</div><div id="pi-feesBars"></div></div>
+    <div class="card"><div class="card-title">Attorney fees by referring attorney</div><div class="card-sub">PI matters with fee data</div><div id="pi-feesBars"></div></div>
     <div class="card"><div class="card-title">Responsible attorney</div><div class="card-sub">PI matter count by attorney</div><div id="pi-attorneyBars"></div></div>
   </div>
   <p class="section-eyebrow">People</p>
@@ -413,10 +332,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <p class="section-eyebrow">Performance & financials</p>
   <div class="chart-row r-2">
     <div class="card"><div class="card-title">Avg days to close by attorney</div><div class="card-sub">Closed WC matters only · active attorneys</div><div id="wc-daysBars"></div></div>
-    <div class="card"><div class="card-title">Settlement amounts by sub-area</div><div class="card-sub">WC matters with settlement data in Clio</div><div id="wc-settlementBars"></div></div>
+    <div class="card"><div class="card-title">Settlement amounts by sub-area</div><div class="card-sub">WC matters with settlement data</div><div id="wc-settlementBars"></div></div>
   </div>
   <div class="chart-row r-2">
-    <div class="card"><div class="card-title">Attorney fees by sub-area</div><div class="card-sub">WC matters with fee data in Clio</div><div id="wc-feesBars"></div></div>
+    <div class="card"><div class="card-title">Attorney fees by sub-area</div><div class="card-sub">WC matters with fee data</div><div id="wc-feesBars"></div></div>
     <div class="card"><div class="card-title">Responsible attorney</div><div class="card-sub">WC matter count by attorney</div><div id="wc-attorneyBars"></div></div>
   </div>
   <p class="section-eyebrow">People</p>
@@ -476,14 +395,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 <script>
 // ██████████████████████████████████████████████████████████████████████████████
-//  CONFIG — PASTE YOUR CREDENTIALS HERE
+//  CONFIG — SUPABASE CONNECTION (read-only anon key — safe for browser)
 // ██████████████████████████████████████████████████████████████████████████████
 const CONFIG = {
-  access_token:   '33902-9sqk0syoXIUbMIhoSwUFzguCjVao2Za1ZI',
-  refresh_token:  'GmsrCr6TlUiYFxnXebNkLH4f0IFkgQ0ZDyly92Ab',
-  client_id:      'yuBr9ZA2HVtUKNB7QBX4hFX69fxt8CWvyQBuRR2B',
-  client_secret:  '9w5ylIedznBnktTmYMb6q5qvoX9ByDNikhfPBMRi',
-  base_url:       'https://app.clio.com',
+  supabase_url:  'https://ckfawnaqydpufirudqib.supabase.co',
+  supabase_key:  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrZmF3bmFxeWRwdWZpcnVkcWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0MDg2NTQsImV4cCI6MjEwNDk4NDY1NH0.qznDsWc_1667oLSSRBEjm2bhu_0_JD7C8L6RaaWYvvs',
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -545,53 +461,15 @@ const ZIP_GEO = {
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  FALLBACK DATA
-// ══════════════════════════════════════════════════════════════════════════════
-const FALLBACK_AS_OF = 'Jun 22, 2026';
-const FB_MATRIX = {
-  'Open|Criminal':{count:461,avgDur:205},'Open|Personal Injury':{count:95,avgDur:788},
-  "Open|Workers' Comp":{count:87,avgDur:null},'Open|Other':{count:77,avgDur:404},
-  'Closed|Criminal':{count:1554,avgDur:272},'Closed|Personal Injury':{count:315,avgDur:538},
-  "Closed|Workers' Comp":{count:384,avgDur:336},'Closed|Other':{count:73,avgDur:291},
-  'Pending|Criminal':{count:22,avgDur:215},'Pending|Personal Injury':{count:52,avgDur:null},
-  "Pending|Workers' Comp":{count:72,avgDur:429},'Pending|Other':{count:0,avgDur:null},
-};
-// Fallback zip data for when contacts can't be fetched
-const FB_ZIP_DATA = [
-  {zip:'30060',city:'Marietta',count:192},   {zip:'30043',city:'Lawrenceville',count:162},
-  {zip:'30071',city:'Norcross',count:139},   {zip:'30303',city:'Atlanta',count:115},
-  {zip:'30318',city:'Atlanta NW',count:100}, {zip:'30309',city:'Midtown',count:90},
-  {zip:'30341',city:'Chamblee',count:88},    {zip:'30075',city:'Roswell',count:82},
-  {zip:'30040',city:'Cumming',count:74},     {zip:'30097',city:'Duluth',count:73},
-  {zip:'30047',city:'Lilburn',count:73},     {zip:'30340',city:'Doraville',count:70},
-  {zip:'30101',city:'Acworth',count:66},     {zip:'30084',city:'Tucker',count:63},
-  {zip:'30080',city:'Smyrna',count:62},      {zip:'30044',city:'Lawrenceville S',count:60},
-  {zip:'30519',city:'Buford',count:61},      {zip:'30501',city:'Gainesville',count:61},
-  {zip:'30168',city:'Austell',count:60},     {zip:'30030',city:'Decatur',count:60},
-  {zip:'30144',city:'Kennesaw',count:59},    {zip:'30087',city:'Stone Mountain',count:58},
-  {zip:'30076',city:'Alpharetta',count:58},  {zip:'30114',city:'Canton',count:57},
-  {zip:'30135',city:'Douglasville',count:55},{zip:'30188',city:'Woodstock',count:52},
-  {zip:'30082',city:'Mableton',count:51},    {zip:'30132',city:'Dallas',count:47},
-  {zip:'30052',city:'Loganville',count:47},  {zip:'30720',city:'Dalton',count:47},
-];
-
-// ══════════════════════════════════════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════════════════════════════════════
 let ALL_MATTERS = [];
 let CLIENT_ZIP_MAP = {}; // clientId → {zip, city}
-let ZIP_COUNTS_ALL = []; // [{zip, city, count, lat, lng}] for all matters
 let DATA_MODE = 'offline';
-let DATA_AS_OF = FALLBACK_AS_OF;
+let DATA_AS_OF = '';
 let CURRENT_PAGE = 'overview';
 let CURRENT_CR_SUBAREA = 'all';
 let CONTACTS_LOADED = false;
-let DATE_FILTER_START = null; // Date object or null for 'all'
-let DATE_FILTER_END = null;
-let DATE_FILTER_FIELD = 'open_date'; // 'open_date' or 'close_date'
-let DATE_FILTER_PRESET = 'all';
-let DATE_FILTER_MODE = 'range'; // 'range' or 'snapshot'
-let SNAPSHOT_DATE = null; // Date object for snapshot mode
 
 const STATUSES = ['Open','Closed','Pending'];
 const AREAS = ['Criminal','Personal Injury',"Workers' Comp",'Other'];
@@ -604,93 +482,73 @@ const CHARTS = {};
 const MAPS = {};
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  API
+//  SUPABASE API
 // ══════════════════════════════════════════════════════════════════════════════
-const MATTER_FIELDS = [
-  'id','status','open_date','close_date',
-  'practice_area%7Bid%2Cname%7D',
-  'responsible_attorney%7Bid%2Cname%7D',
-  'client%7Bid%2Cname%7D',
-  'custom_field_values%7Bid%2Cvalue%2Cfield_name%7D',
-].join('%2C');
-
-const CONTACT_FIELDS = 'id%2Cname%2Caddresses%7Bname%2Cstreet%2Ccity%2Cprovince%2Cpostal_code%7D';
-
-async function apiGet(path) {
-  const workerUrl = `https://clio-proxy.mitchell-173.workers.dev/?path=${encodeURIComponent(path)}`;
-  const res = await fetch(workerUrl);
-  const text = await res.text();
-  if (!res.ok) throw new Error(`Worker error ${res.status}: ${text.substring(0,200)}`);
-  try { return JSON.parse(text); }
-  catch(e) { throw new Error(`JSON parse error: ${text.substring(0,200)}`); }
+async function supabaseGet(table, select = '*', options = '') {
+  const url = `${CONFIG.supabase_url}/rest/v1/${table}?select=${encodeURIComponent(select)}${options}`;
+  const res = await fetch(url, {
+    headers: {
+      'apikey': CONFIG.supabase_key,
+      'Authorization': `Bearer ${CONFIG.supabase_key}`,
+    },
+  });
+  if (!res.ok) throw new Error(`Supabase error ${res.status}: ${await res.text()}`);
+  return res.json();
 }
 
 async function fetchAllMatters() {
+  setLoadMessage('Loading matters from database…');
+  // Supabase returns max 1000 rows by default, so paginate
   const all = [];
-  let pageToken = null;
-  let page = 0;
-  const first = await apiGet(`/api/v4/matters.json?limit=200&fields=${MATTER_FIELDS}`);
-  if (!first || !first.data) throw new Error('Bad response: '+JSON.stringify(first).substring(0,200));
-  const total = first?.meta?.paging?.total_count || first.data.length;
-  const totalPages = Math.ceil(total/200);
-  all.push(...(first.data||[]));
-  pageToken = first?.meta?.paging?.next||null;
-  page=1;
-  setLoadProgress(page,totalPages,all.length,total,'matters');
-  while(pageToken){
-    await sleep(100);
-    const json = await apiGet(`/api/v4/matters.json?limit=200&fields=${MATTER_FIELDS}&page_token=${pageToken}`);
-    all.push(...(json.data||[]));
-    pageToken=json?.meta?.paging?.next||null;
-    page++;
-    setLoadProgress(page,totalPages,all.length,total,'matters');
+  let offset = 0;
+  const limit = 1000;
+  while (true) {
+    const batch = await supabaseGet('matters', '*', `&order=clio_id&limit=${limit}&offset=${offset}`);
+    all.push(...batch);
+    if (batch.length < limit) break;
+    offset += limit;
+    setLoadMessage(`Loading matters… ${all.length.toLocaleString()} loaded`);
   }
-  return all;
+  // Transform Supabase flat rows into the shape the rendering code expects
+  return all.map(m => ({
+    ...m,
+    // Re-create nested objects so existing rendering code works unchanged
+    practice_area: { name: m.practice_area_name, id: m.practice_area_id },
+    responsible_attorney: { name: m.responsible_attorney, id: m.responsible_attorney_id },
+    originating_attorney: { name: m.originating_attorney, id: m.originating_attorney_id },
+    client: { id: m.client_id, name: m.client_name },
+    // Re-create custom_field_values array so getCF() works unchanged
+    custom_field_values: [
+      { field_name: 'Preferred Language', value: m.preferred_language },
+      { field_name: 'Referral Source', value: m.referral_source },
+      { field_name: 'Settlement Amount', value: m.settlement_amount },
+      { field_name: 'Attorney Fees', value: m.attorney_fees },
+      { field_name: 'Total Awards', value: m.total_awards },
+      { field_name: 'Court', value: m.court },
+      { field_name: 'Judge', value: m.judge },
+    ].filter(f => f.value != null),
+  }));
 }
 
-async function fetchAllContacts(clientIds) {
-  // Fetch contacts in batches using IDs from matters
-  // Clio allows filtering contacts by ID
-  const ids = [...clientIds];
-  const all = {};
-  let page = 0;
-  const totalPages = Math.ceil(ids.length/200);
-
-  setLoadMessage(`Loading client addresses… 0 of ${ids.length.toLocaleString()} contacts`);
-
-  // Fetch in batches of 200
-  for(let i=0; i<ids.length; i+=200){
-    const batch = ids.slice(i, i+200);
-    // Use query param to filter by multiple IDs - Clio supports this
-    const idParams = batch.map(id=>`client_id[]=${id}`).join('&');
-    try {
-      // Fetch contacts page by page with just address fields
-      let pt = null;
-      do {
-        const path = pt
-          ? `/api/v4/contacts.json?limit=200&fields=${CONTACT_FIELDS}&page_token=${pt}`
-          : `/api/v4/contacts.json?limit=200&fields=${CONTACT_FIELDS}`;
-        const json = await apiGet(path);
-        (json.data||[]).forEach(c=>{
-          // Get primary address (prefer Home, then first available)
-          const addrs = c.addresses||[];
-          const home = addrs.find(a=>a.name==='Home')||addrs.find(a=>a.postal_code)||addrs[0];
-          if(home&&home.postal_code){
-            all[c.id]={zip:home.postal_code.trim().substring(0,5),city:home.city||''};
-          }
-        });
-        pt = json?.meta?.paging?.next||null;
-        page++;
-        setLoadMessage(`Loading client addresses… ${Object.keys(all).length.toLocaleString()} contacts loaded`);
-        await sleep(50);
-      } while(pt && page<60); // cap at ~12000 contacts
-      break; // We paginated all contacts, break outer loop
-    } catch(e){
-      console.warn('Contact fetch error:', e.message);
-      break;
-    }
+async function fetchAllClients() {
+  setLoadMessage('Loading client addresses…');
+  const all = [];
+  let offset = 0;
+  const limit = 1000;
+  while (true) {
+    const batch = await supabaseGet('clients', 'clio_id,zip_code,city', `&order=clio_id&limit=${limit}&offset=${offset}`);
+    all.push(...batch);
+    if (batch.length < limit) break;
+    offset += limit;
   }
-  return all;
+  // Build CLIENT_ZIP_MAP: clientId → {zip, city}
+  const zipMap = {};
+  all.forEach(c => {
+    if (c.zip_code) {
+      zipMap[c.clio_id] = { zip: c.zip_code, city: c.city || '' };
+    }
+  });
+  return zipMap;
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -720,16 +578,7 @@ function getZipData(matters) {
   if(CONTACTS_LOADED && Object.keys(CLIENT_ZIP_MAP).length > 0) {
     return buildZipCounts(matters);
   }
-  // Fallback to FB_ZIP_DATA proportionally scaled
-  if(matters.length === ALL_MATTERS.length || ALL_MATTERS.length === 0) return FB_ZIP_DATA.map(z=>{
-    const geo=ZIP_GEO[z.zip];
-    return geo?{...z,lat:geo[0],lng:geo[1]}:null;
-  }).filter(Boolean);
-  const ratio = matters.length/ALL_MATTERS.length;
-  return FB_ZIP_DATA.map(z=>{
-    const geo=ZIP_GEO[z.zip];
-    return geo?{...z,count:Math.max(1,Math.round(z.count*ratio)),lat:geo[0],lng:geo[1]}:null;
-  }).filter(Boolean);
+  return []; // No fallback needed — Supabase always has data
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -780,207 +629,8 @@ function renderBars(id,data,colorFn,lw=160,valFmt=null){
   }).join('');
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  DATE FILTER
-// ══════════════════════════════════════════════════════════════════════════════
-function applyDateFilter(matters){
-  if(DATE_FILTER_MODE === 'snapshot') return applySnapshotFilter(matters);
-  if(!DATE_FILTER_START && !DATE_FILTER_END) return matters;
-  return matters.filter(m=>{
-    const raw = m[DATE_FILTER_FIELD];
-    if(!raw) return false;
-    const d = new Date(raw);
-    if(DATE_FILTER_START && d < DATE_FILTER_START) return false;
-    if(DATE_FILTER_END && d > DATE_FILTER_END) return false;
-    return true;
-  });
-}
-
-function applySnapshotFilter(matters){
-  if(!SNAPSHOT_DATE) return matters;
-  const snap = SNAPSHOT_DATE;
-  // Return matters that existed as of the snapshot date, with reconstructed statuses
-  return matters
-    .filter(m=>{
-      if(!m.open_date) return false;
-      return new Date(m.open_date) <= snap; // matter must have been opened by snapshot date
-    })
-    .map(m=>{
-      // Reconstruct status as of snapshot date
-      const hadClosed = m.close_date && new Date(m.close_date) <= snap;
-      const snapshotStatus = hadClosed ? 'Closed' : 'Open';
-      // Return shallow copy with overridden status
-      return {...m, status: snapshotStatus, _originalStatus: m.status};
-    });
-}
-
-function getDateFilteredMatters(){
-  return applyDateFilter(ALL_MATTERS);
-}
-
-function setFilterMode(mode){
-  DATE_FILTER_MODE = mode;
-  document.getElementById('dfModeRange').classList.toggle('active', mode==='range');
-  document.getElementById('dfModeSnap').classList.toggle('active', mode==='snapshot');
-  document.getElementById('dfRangeControls').style.display = mode==='range' ? 'flex' : 'none';
-  document.getElementById('dfSnapshotControls').style.display = mode==='snapshot' ? 'flex' : 'none';
-  document.getElementById('dfSnapBadge').classList.toggle('show', mode==='snapshot' && SNAPSHOT_DATE !== null);
-  if(mode === 'range'){
-    // Reset snapshot
-    SNAPSHOT_DATE = null;
-    document.getElementById('dfSnapDate').value = '';
-    document.querySelectorAll('#dfSnapPresets .df-preset').forEach(b=>b.classList.remove('active'));
-    // Re-apply current range filter
-    updateDateLabel();
-    renderPage(CURRENT_PAGE);
-  } else {
-    // Entering snapshot mode — clear range filter display
-    updateDateLabel();
-    if(SNAPSHOT_DATE) renderPage(CURRENT_PAGE);
-  }
-}
-
-function setSnapshotPreset(preset, btn){
-  document.querySelectorAll('#dfSnapPresets .df-preset').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  const now = new Date();
-  switch(preset){
-    case 'today':
-      SNAPSHOT_DATE = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59); break;
-    case 'lastWeek': {
-      // End of last Sunday (most recent past Sunday end-of-day)
-      const d = new Date(now); d.setDate(d.getDate() - d.getDay()); // this Sunday
-      if(d.toDateString()===now.toDateString()) d.setDate(d.getDate()-7); // if today is Sunday, go back a week
-      SNAPSHOT_DATE = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59); break;
-    }
-    case 'lastMonth':
-      SNAPSHOT_DATE = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59); break;
-    case 'lastQ': {
-      const qStart = Math.floor(now.getMonth()/3)*3;
-      SNAPSHOT_DATE = new Date(now.getFullYear(), qStart, 0, 23, 59, 59); break;
-    }
-    case 'endLastYear':
-      SNAPSHOT_DATE = new Date(now.getFullYear()-1, 11, 31, 23, 59, 59); break;
-    case '6moAgo': {
-      const d = new Date(now); d.setMonth(d.getMonth()-6);
-      SNAPSHOT_DATE = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59); break;
-    }
-    case '1yrAgo': {
-      const d = new Date(now); d.setFullYear(d.getFullYear()-1);
-      SNAPSHOT_DATE = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59); break;
-    }
-  }
-  // Sync date input
-  if(SNAPSHOT_DATE) document.getElementById('dfSnapDate').value = SNAPSHOT_DATE.toISOString().substring(0,10);
-  document.getElementById('dfSnapBadge').classList.add('show');
-  updateDateLabel();
-  renderPage(CURRENT_PAGE);
-}
-
-function setCustomSnapshot(){
-  const val = document.getElementById('dfSnapDate').value;
-  document.querySelectorAll('#dfSnapPresets .df-preset').forEach(b=>b.classList.remove('active'));
-  if(val){
-    SNAPSHOT_DATE = new Date(val+'T23:59:59');
-    document.getElementById('dfSnapBadge').classList.add('show');
-  } else {
-    SNAPSHOT_DATE = null;
-    document.getElementById('dfSnapBadge').classList.remove('show');
-  }
-  updateDateLabel();
-  renderPage(CURRENT_PAGE);
-}
-
-function setDatePreset(preset, btn){
-  DATE_FILTER_PRESET = preset;
-  document.querySelectorAll('#dfRangeControls .df-preset').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-  const startOf = (y,m,d) => new Date(y, m, d, 0, 0, 0);
-  switch(preset){
-    case 'all':
-      DATE_FILTER_START = null; DATE_FILTER_END = null; break;
-    case '7d':
-      DATE_FILTER_START = new Date(now); DATE_FILTER_START.setDate(DATE_FILTER_START.getDate()-7);
-      DATE_FILTER_START.setHours(0,0,0,0); DATE_FILTER_END = today; break;
-    case '30d':
-      DATE_FILTER_START = new Date(now); DATE_FILTER_START.setDate(DATE_FILTER_START.getDate()-30);
-      DATE_FILTER_START.setHours(0,0,0,0); DATE_FILTER_END = today; break;
-    case 'thisMonth':
-      DATE_FILTER_START = startOf(now.getFullYear(), now.getMonth(), 1); DATE_FILTER_END = today; break;
-    case 'lastMonth': {
-      const lm = new Date(now.getFullYear(), now.getMonth()-1, 1);
-      DATE_FILTER_START = startOf(lm.getFullYear(), lm.getMonth(), 1);
-      DATE_FILTER_END = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59); break;
-    }
-    case 'thisQ': {
-      const qStart = Math.floor(now.getMonth()/3)*3;
-      DATE_FILTER_START = startOf(now.getFullYear(), qStart, 1); DATE_FILTER_END = today; break;
-    }
-    case 'ytd':
-      DATE_FILTER_START = startOf(now.getFullYear(), 0, 1); DATE_FILTER_END = today; break;
-    case 'lastYear':
-      DATE_FILTER_START = startOf(now.getFullYear()-1, 0, 1);
-      DATE_FILTER_END = new Date(now.getFullYear()-1, 11, 31, 23, 59, 59); break;
-    default:
-      DATE_FILTER_START = null; DATE_FILTER_END = null;
-  }
-  const dfS = document.getElementById('dfStart');
-  const dfE = document.getElementById('dfEnd');
-  if(DATE_FILTER_START){dfS.value=DATE_FILTER_START.toISOString().substring(0,10);}else{dfS.value='';}
-  if(DATE_FILTER_END){dfE.value=DATE_FILTER_END.toISOString().substring(0,10);}else{dfE.value='';}
-  updateDateLabel();
-  renderPage(CURRENT_PAGE);
-}
-
-function setCustomDateRange(){
-  const dfS = document.getElementById('dfStart').value;
-  const dfE = document.getElementById('dfEnd').value;
-  document.querySelectorAll('#dfRangeControls .df-preset').forEach(b=>b.classList.remove('active'));
-  DATE_FILTER_PRESET = 'custom';
-  if(dfS){ DATE_FILTER_START = new Date(dfS+'T00:00:00'); } else { DATE_FILTER_START = null; }
-  if(dfE){ DATE_FILTER_END = new Date(dfE+'T23:59:59'); } else { DATE_FILTER_END = null; }
-  updateDateLabel();
-  renderPage(CURRENT_PAGE);
-}
-
-function setDateField(field){
-  DATE_FILTER_FIELD = field;
-  document.getElementById('dfFieldOpen').classList.toggle('active', field==='open_date');
-  document.getElementById('dfFieldClose').classList.toggle('active', field==='close_date');
-  updateDateLabel();
-  if(DATE_FILTER_PRESET !== 'all') renderPage(CURRENT_PAGE);
-}
-
-function updateDateLabel(){
-  const el = document.getElementById('dfActiveLabel');
-  if(DATE_FILTER_MODE === 'snapshot'){
-    if(!SNAPSHOT_DATE){ el.classList.remove('show'); return; }
-    const fmt = d => d.toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
-    const filtered = getDateFilteredMatters();
-    const openCount = filtered.filter(m=>m.status==='Open').length;
-    const closedCount = filtered.filter(m=>m.status==='Closed').length;
-    el.textContent = `Snapshot: ${filtered.length.toLocaleString()} matters as of ${fmt(SNAPSHOT_DATE)} · ${openCount.toLocaleString()} open · ${closedCount.toLocaleString()} closed`;
-    el.classList.add('show');
-    return;
-  }
-  if(DATE_FILTER_PRESET === 'all' || (!DATE_FILTER_START && !DATE_FILTER_END)){
-    el.classList.remove('show'); return;
-  }
-  const fieldLabel = DATE_FILTER_FIELD === 'open_date' ? 'opened' : 'closed';
-  const fmt = d => d.toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
-  let range = '';
-  if(DATE_FILTER_START && DATE_FILTER_END) range = `${fmt(DATE_FILTER_START)} – ${fmt(DATE_FILTER_END)}`;
-  else if(DATE_FILTER_START) range = `from ${fmt(DATE_FILTER_START)}`;
-  else range = `through ${fmt(DATE_FILTER_END)}`;
-  const filtered = getDateFilteredMatters();
-  el.textContent = `Showing ${filtered.length.toLocaleString()} matters ${fieldLabel} ${range}`;
-  el.classList.add('show');
-}
-
 function filterMatters(area,subarea=null){
-  return applyDateFilter(ALL_MATTERS).filter(m=>{
+  return ALL_MATTERS.filter(m=>{
     const paName=m.practice_area?.name||null;
     const cat=categorizePracticeArea(paName);
     if(cat!==area)return false;
@@ -1110,7 +760,7 @@ function drawZipMap(mapId,zipData,bubbleColor){
   // Update status line
   const statusEl=document.getElementById(`${mapId}-status`);
   if(statusEl){
-    const src=CONTACTS_LOADED?'live zip code data':'estimated data — zip codes loading';
+    const src=CONTACTS_LOADED?'live zip code data':'data loading';
     statusEl.textContent=`${zipData.length} zip codes · ${zipData.reduce((a,z)=>a+z.count,0).toLocaleString()} clients mapped · ${src}`;
   }
 }
@@ -1122,7 +772,7 @@ function refreshMapForPage(page){
   if(!mapId)return;
   if(!MAPS[mapId])initMap(mapId);
   let matters;
-  if(page==='overview') matters=getDateFilteredMatters();
+  if(page==='overview') matters=ALL_MATTERS;
   else if(page==='criminal') matters=filterMatters('Criminal',CURRENT_CR_SUBAREA==='all'?null:CURRENT_CR_SUBAREA);
   else if(page==='pi') matters=filterMatters('Personal Injury');
   else if(page==='wc') matters=filterMatters("Workers' Comp");
@@ -1170,7 +820,7 @@ function renderZipBars(id,matters,lw=175){
 //  PAGE RENDERERS
 // ══════════════════════════════════════════════════════════════════════════════
 function renderOverview(){
-  const m=getDateFilteredMatters();
+  const m=ALL_MATTERS;
   let open=0,closed=0,pending=0,durSum=0,durCount=0;
   const byArea={};AREAS.forEach(a=>byArea[a]=0);
   m.forEach(mat=>{
@@ -1287,7 +937,6 @@ function switchPage(page){
 
 function renderPage(page){
   if(!ALL_MATTERS.length)return;
-  updateDateLabel();
   if(page==='overview')renderOverview();
   else if(page==='criminal')renderCriminal();
   else if(page==='pi')renderPI();
@@ -1326,90 +975,66 @@ function showBanner(mode,asOf){
   const banner=document.getElementById('dataBanner');
   const msg=document.getElementById('bannerMsg');
   banner.className=`show ${mode}`;
-  if(mode==='live')msg.textContent=`Live data from Clio · Last refreshed ${new Date().toLocaleString([],{dateStyle:'medium',timeStyle:'short'})}`;
-  else msg.textContent=`Offline mode — showing cached data as of ${asOf}. Check your token or internet connection.`;
-  s('asOf',mode==='live'?`Live · ${new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'})}`:`Cached · ${asOf}`);
+  if(mode==='live')msg.textContent=`Live data · Last refreshed ${new Date().toLocaleString([],{dateStyle:'medium',timeStyle:'short'})}`;
+  else msg.textContent=`Offline — could not connect to database.`;
+  s('asOf',mode==='live'?`Live · ${new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'})}`:'Offline');
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════════════════════════════════
 async function init(){
-  const tokenMissing=CONFIG.access_token==='YOUR_ACCESS_TOKEN_HERE';
-  if(tokenMissing){
-    setLoadMessage('No token configured — using cached data','Edit the CONFIG block at the top of this file');
-    document.getElementById('loadBadge').className='loading-mode-badge offline';
-    await sleep(1200);
-    ALL_MATTERS=[];CLIENT_ZIP_MAP={};CONTACTS_LOADED=false;
-    DATA_MODE='offline';DATA_AS_OF=FALLBACK_AS_OF;
-  } else {
-    try {
-      // Step 1: Fetch matters
-      setLoadMessage('Connecting to Clio API…');
-      const matters=await fetchAllMatters();
-      // Filter custom fields
-      ALL_MATTERS=matters;
-      DATA_MODE='live';DATA_AS_OF=new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
+  try {
+    setLoadMessage('Connecting to database…');
+    document.getElementById('loadBar').style.width='30%';
 
-      // Step 2: Show dashboard with city-based fallback maps while contacts load
-      finishLoading(DATA_MODE);
-      showBanner(DATA_MODE,DATA_AS_OF);
-      renderPage('overview');
+    // Step 1: Fetch all matters from Supabase (fast — milliseconds)
+    const matters = await fetchAllMatters();
+    ALL_MATTERS = matters;
+    document.getElementById('loadBar').style.width='60%';
 
-      // Step 3: Fetch contacts in background for zip code maps
-      setLoadMessage('Loading client zip codes in background…');
-      try {
-        const clientIds=new Set(matters.map(m=>m.client?.id).filter(Boolean));
-        const zipMap=await fetchAllContacts([...clientIds]);
-        CLIENT_ZIP_MAP=zipMap;
-        CONTACTS_LOADED=true;
-        // Refresh current page maps with real zip data
-        const matched=Object.keys(zipMap).length;
-        console.log(`Zip codes loaded: ${matched} clients mapped`);
-        refreshMapForPage(CURRENT_PAGE);
-        // Update zip bar chart if on overview
-        if(CURRENT_PAGE==='overview'){
-          renderZipBars('ov-zipBars',getDateFilteredMatters(),175);
-        }
-      } catch(ce){
-        console.warn('Contact zip fetch failed:',ce.message);
-        CONTACTS_LOADED=false;
-      }
-      return; // Early return — finishLoading already called above
-    } catch(e){
-      console.warn('API fetch failed:',e.message);
-      setLoadMessage('Could not reach Clio — using cached data',e.message);
-      document.getElementById('loadBadge').className='loading-mode-badge offline';
-      await sleep(1500);
-      ALL_MATTERS=[];CLIENT_ZIP_MAP={};CONTACTS_LOADED=false;
-      DATA_MODE='offline';DATA_AS_OF=FALLBACK_AS_OF;
-    }
+    // Step 2: Fetch client zip codes from Supabase
+    const zipMap = await fetchAllClients();
+    CLIENT_ZIP_MAP = zipMap;
+    CONTACTS_LOADED = true;
+    document.getElementById('loadBar').style.width='90%';
+
+    DATA_MODE = 'live';
+    DATA_AS_OF = new Date().toLocaleDateString([], {month:'short', day:'numeric', year:'numeric'});
+
+    console.log(`Dashboard loaded: ${ALL_MATTERS.length} matters, ${Object.keys(CLIENT_ZIP_MAP).length} client zip codes`);
+
+    finishLoading(DATA_MODE);
+    showBanner(DATA_MODE, DATA_AS_OF);
+    renderPage('overview');
+  } catch(e) {
+    console.error('Init failed:', e.message);
+    setLoadMessage('Could not load data — check connection', e.message);
+    document.getElementById('loadBadge').className = 'loading-mode-badge offline';
+    await sleep(2000);
+    DATA_MODE = 'offline';
+    finishLoading(DATA_MODE);
+    showBanner(DATA_MODE, '');
   }
-  finishLoading(DATA_MODE);
-  showBanner(DATA_MODE,DATA_AS_OF);
-  renderPage('overview');
-  window.addEventListener('resize',()=>{Object.values(MAPS).forEach(m=>m.map?.invalidateSize());});
+  window.addEventListener('resize', () => { Object.values(MAPS).forEach(m => m.map?.invalidateSize()); });
 }
 
 async function refreshData(){
   const btn=document.getElementById('refreshBtn');
   btn.classList.add('spinning');btn.disabled=true;
   try{
-    const matters=await fetchAllMatters();
-    ALL_MATTERS=matters;
+    const matters = await fetchAllMatters();
+    ALL_MATTERS = matters;
+    const zipMap = await fetchAllClients();
+    CLIENT_ZIP_MAP = zipMap;
+    CONTACTS_LOADED = true;
     DATA_MODE='live';DATA_AS_OF=new Date().toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
     showBanner('live',DATA_AS_OF);
     renderPage(CURRENT_PAGE);
-    // Re-fetch contacts
-    const clientIds=new Set(matters.map(m=>m.client?.id).filter(Boolean));
-    const zipMap=await fetchAllContacts([...clientIds]);
-    CLIENT_ZIP_MAP=zipMap;CONTACTS_LOADED=true;
-    refreshMapForPage(CURRENT_PAGE);
   }catch(e){alert('Refresh failed: '+e.message);}
   finally{btn.classList.remove('spinning');btn.disabled=false;}
 }
 
-window.addEventListener('resize',()=>{Object.values(MAPS).forEach(m=>m.map?.invalidateSize());});
 init();
 </script>
 </body>
