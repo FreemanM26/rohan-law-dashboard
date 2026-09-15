@@ -490,6 +490,7 @@ async function supabaseGet(table, select = '*', options = '') {
     headers: {
       'apikey': CONFIG.supabase_key,
       'Authorization': `Bearer ${CONFIG.supabase_key}`,
+      'Range': '0-9999',  // Allow up to 10,000 rows per request
     },
   });
   if (!res.ok) throw new Error(`Supabase error ${res.status}: ${await res.text()}`);
@@ -497,20 +498,13 @@ async function supabaseGet(table, select = '*', options = '') {
 }
 
 async function fetchAllMatters() {
-  setLoadMessage('Loading matters from database…');
-  // Supabase returns max 1000 rows by default, so paginate
-  const all = [];
-  let offset = 0;
-  const limit = 1000;
-  while (true) {
-    const batch = await supabaseGet('matters', '*', `&order=clio_id&limit=${limit}&offset=${offset}`);
-    all.push(...batch);
-    if (batch.length < limit) break;
-    offset += limit;
-    setLoadMessage(`Loading matters… ${all.length.toLocaleString()} loaded`);
-  }
+  // Supabase with Range header returns up to 10,000 rows — we have ~4,000
+  // Select only the fields the dashboard actually uses
+  const select = 'clio_id,status,open_date,close_date,practice_area_name,practice_area_id,responsible_attorney,responsible_attorney_id,originating_attorney,originating_attorney_id,client_id,client_name,preferred_language,referral_source,settlement_amount,attorney_fees,total_awards,court,judge';
+  const data = await supabaseGet('matters', select, '&order=clio_id');
+
   // Transform Supabase flat rows into the shape the rendering code expects
-  return all.map(m => ({
+  return data.map(m => ({
     ...m,
     // Re-create nested objects so existing rendering code works unchanged
     practice_area: { name: m.practice_area_name, id: m.practice_area_id },
@@ -531,22 +525,11 @@ async function fetchAllMatters() {
 }
 
 async function fetchAllClients() {
-  setLoadMessage('Loading client addresses…');
-  const all = [];
-  let offset = 0;
-  const limit = 1000;
-  while (true) {
-    const batch = await supabaseGet('clients', 'clio_id,zip_code,city', `&order=clio_id&limit=${limit}&offset=${offset}`);
-    all.push(...batch);
-    if (batch.length < limit) break;
-    offset += limit;
-  }
-  // Build CLIENT_ZIP_MAP: clientId → {zip, city}
+  // Only fetch clients that have a zip code — cuts 19k rows down to just the ones we need
+  const data = await supabaseGet('clients', 'clio_id,zip_code,city', '&zip_code=not.is.null&order=clio_id');
   const zipMap = {};
-  all.forEach(c => {
-    if (c.zip_code) {
-      zipMap[c.clio_id] = { zip: c.zip_code, city: c.city || '' };
-    }
+  data.forEach(c => {
+    zipMap[c.clio_id] = { zip: c.zip_code, city: c.city || '' };
   });
   return zipMap;
 }
@@ -985,16 +968,16 @@ function showBanner(mode,asOf){
 // ══════════════════════════════════════════════════════════════════════════════
 async function init(){
   try {
-    setLoadMessage('Connecting to database…');
+    setLoadMessage('Loading data…');
     document.getElementById('loadBar').style.width='30%';
 
-    // Step 1: Fetch all matters from Supabase (fast — milliseconds)
-    const matters = await fetchAllMatters();
-    ALL_MATTERS = matters;
-    document.getElementById('loadBar').style.width='60%';
+    // Fetch matters and client zip codes in parallel — both are fast from Supabase
+    const [matters, zipMap] = await Promise.all([
+      fetchAllMatters(),
+      fetchAllClients(),
+    ]);
 
-    // Step 2: Fetch client zip codes from Supabase
-    const zipMap = await fetchAllClients();
+    ALL_MATTERS = matters;
     CLIENT_ZIP_MAP = zipMap;
     CONTACTS_LOADED = true;
     document.getElementById('loadBar').style.width='90%';
